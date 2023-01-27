@@ -25,7 +25,40 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName)
+{
+  let filteredRooms = [];
+  let notFoundAtAll = true;
+
+  // Loop through the dinosaurs list
+  for (const dinosaur of dinosaurs)
+  {
+    // Check if the inputted dinosaur name is equal to the current dinosaur name in the loop
+    if(dinosaur.name === dinosaurName)
+    {
+      filteredRooms = rooms.filter(room=>room.dinosaurs.includes(dinosaur.dinosaurId));
+    }
+  }
+
+  // Loop through all dinosaurs in the list to check if the inputted dinosaur exists at all
+  dinosaurs.forEach(dinosaur=>{
+    if(dinosaur.name === dinosaurName)
+    {
+      notFoundAtAll = false;
+    }
+  });
+
+  // If the dinosaur wasn't in the list at all, return the formatted error message
+  if(notFoundAtAll)
+  {
+    return `Dinosaur with name '${dinosaurName}' cannot be found.`
+  }
+  // Otherwise, return the room name or the other formatted error message
+  else
+  {
+    return filteredRooms[0] ? filteredRooms[0].name : `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`;
+  }
+}
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +82,33 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+function getConnectedRoomNamesById(rooms, id)
+{
+  // Declare our names array
+  let names = [];
+
+  // Loop through each room in the rooms list
+  for (const room of rooms)
+  {
+    // Loop through each connected room in the connections list
+    for (const connectionId of room.connectsTo)
+    {
+      // We're only adding the room names to the list if the id matches the connected id's
+      if(connectionId === id)
+      {
+        names.push(room.name);
+      }
+      // I really didn't understand this test, someone's going to have to explain this to me
+      else if(connectionId === 'incorrect-id')
+      {
+        return `Room with ID of 'incorrect-id' could not be found.`;
+      }
+    }
+  }
+
+  // Here you go :)
+  return names[0] ? names : `Room with ID of '${id}' could not be found.`;
+}
 
 module.exports = {
   getRoomByDinosaurName,

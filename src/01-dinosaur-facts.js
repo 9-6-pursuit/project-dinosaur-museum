@@ -22,7 +22,40 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs)
+{
+  // "Declare" the longest dinosaur object
+  let longest =  dinosaurs[0] ? {[dinosaurs[0]['name']]: dinosaurs[0].lengthInMeters} : {};
+
+  // "Declare" the longest dinosaur object's key for accessing
+  let longestKey =  dinosaurs[0] ? dinosaurs[0]['name'] : null;
+
+  // "Loop" through the dinosaurs array
+  for (const dinosaur of dinosaurs)
+  {
+    // "Loop" through each key in the current dinosaur object
+    for (const key in dinosaur)
+    {
+      // "Check if" the current dinosaur in the loop has a longer length than our longest variable
+      if(dinosaur.lengthInMeters > longest[longestKey] && key === 'name')
+      {
+        // "If true", change our longest variable to the current dinosaur in the result format
+        delete longest[longestKey];
+        longest[dinosaur[key]] = dinosaur.lengthInMeters;
+        longestKey = dinosaur[key];
+      }
+    }
+  }
+
+  // (Should return an empty object if there are no dinosaurs) ==> I set this up on line 31
+  if(longestKey)
+  {
+    longest[longestKey] *= 3.281;
+  }
+
+  // Return our result
+  return longest;
+}
 
 /**
  * getDinosaurDescription()
@@ -44,14 +77,26 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+  // Filter out the dinosaurs that don't match the id we're looking for
+  let dinosaur = dinosaurs.filter(dinosaurs=>dinosaurs.dinosaurId === id)[0];
+
+  // Not really sure about this one here... I only got it to work by closely reading the data and tests
+  let mya = dinosaur ? dinosaur.mya[dinosaur.mya.length - 1] : null;
+
+  // If we successfully got a dinosaur by id, return the formatted description, otherwise just say it cannot be found...
+  return dinosaur ?  `${dinosaur.name} (${dinosaur.pronunciation})\n${dinosaur.info} It lived in the ${dinosaur.period} period, over ${mya} million years ago.` :
+    `A dinosaur with an ID of '${id}' cannot be found.`;
+}
 
 /**
  * getDinosaursAliveMya()
  * ---------------------
- * Returns an array of dinosaurs who were alive at the given `mya` (i.e. "millions of years ago") value. If a `key` is provided, returns the value of that key for each dinosaur alive at that time. Otherwise, returns the ID.
+ * Returns an array of dinosaurs who were alive at the given `mya` (i.e. "millions of years ago") value. If a `key` is provided, 
+ * returns the value of that key for each dinosaur alive at that time. Otherwise, returns the ID.
  *
- * If the dinosaur only has a single value for `mya`, allows for the `mya` value to be equal to the given value or one less. For example, if a dinosaur has a `mya` value of `[29]`, the dinosaur's information will be returned if `29` is entered or `28` is entered.
+ * If the dinosaur only has a single value for `mya`, allows for the `mya` value to be equal to the given value or one less.
+ * For example, if a dinosaur has a `mya` value of `[29]`, the dinosaur's information will be returned if `29` is entered or `28` is entered.
  *
  * @param {Object[]} dinosaurs - An array of dinosaur objects. See the `data/dinosaurs.js` file for an example of the input.
  * @param {number} mya - "Millions of years ago."
@@ -71,7 +116,33 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key)
+{
+  let dinosaursAlive = [];
+
+  // ok so apparently it was all about range and I was stuck on this for 18 hours
+  let min, max = 0;
+
+  for (const dinosaur of dinosaurs)
+  {
+    min = dinosaur.mya.length === 2 ? dinosaur.mya[1] : dinosaur.mya[0] - 1;
+    max = dinosaur.mya[0];
+
+    if(mya >= min && mya <= max)
+    {
+      if(!key)
+      {
+        dinosaursAlive.push(dinosaur.dinosaurId);
+      }
+      else if(key in dinosaur)
+      {
+        dinosaursAlive.push(dinosaur.name);
+      }
+    }
+  }
+
+  return dinosaursAlive;
+}
 
 module.exports = {
   getLongestDinosaur,

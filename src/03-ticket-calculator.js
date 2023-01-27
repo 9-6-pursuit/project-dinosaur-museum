@@ -5,6 +5,7 @@
 
   Keep in mind that your functions must still have and use a parameter for accepting all tickets.
 */
+const { extras } = require("../data/tickets");
 const exampleTicketData = require("../data/tickets");
 // Do not change the line above.
 
@@ -54,7 +55,47 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo)
+{
+  // Ticket Type Error
+  if(!ticketData.hasOwnProperty(ticketInfo.ticketType))
+  {
+    return `Ticket type '${ticketInfo.ticketType}' cannot be found.`;
+  }
+
+  // Entrant Type Error
+  if(!ticketData["general"].priceInCents.hasOwnProperty(ticketInfo.entrantType))
+  {
+    return `Entrant type '${ticketInfo.entrantType}' cannot be found.`;
+  }
+
+  // Extras Error
+  for (const extra of ticketInfo.extras)
+  {
+    if(!ticketData["extras"].hasOwnProperty(extra))
+    {
+      return `Extra type '${extra}' cannot be found.`;
+    } 
+  }
+
+  // If there were no errors, just go ahead and calculate the cost
+  let ticketCostInCents = 0;
+
+  if(ticketInfo.ticketType && ticketInfo.entrantType)
+  {
+    if(ticketInfo.extras.length > 0)
+    {
+      for (const extra of ticketInfo.extras)
+      {
+        ticketCostInCents += ticketData.extras[extra].priceInCents[ticketInfo.entrantType];
+      }
+    }
+    ticketCostInCents += ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType];
+  }
+
+
+  return ticketCostInCents;
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +150,72 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases)
+{
+  // We'll be storing all of our admissions in this
+  let ticketReceipts = [];
+
+  // This will be formatted a string at the end of the function
+  let total = 0;
+
+  // Looping through the ticket purchases to get the cost and admissions
+  for (const purchase of purchases)
+  {
+    /* 
+       I was using this for hours, trying to figure out why it wasn't working lol
+       if(Number.isNaN(calculateTicketPrice(ticketData, purchase)))
+       {
+        return calculateTicketPrice(ticketData, purchase);
+       } 
+    */
+
+    if(typeof calculateTicketPrice(ticketData, purchase) === 'number')
+    {
+      let entrantString = purchase.entrantType[0].toUpperCase() + purchase.entrantType.slice(1, purchase.entrantType.length);
+
+      let ticketTypeString = purchase.ticketType[0].toUpperCase() + purchase.ticketType.slice(1, purchase.ticketType.length);
+
+      let extrasString = "";
+
+      purchase.extras.map((extra, index)=>{
+        if(index + 1 === purchase.extras.length && ticketData.extras[extra].description)
+          extrasString += ticketData.extras[extra].description;
+        else if(index + 1 !== purchase.extras.length)
+          extrasString += ticketData.extras[extra].description + ", "
+      });
+
+      let finalString = `${entrantString} ${ticketTypeString} Admission: $${(calculateTicketPrice(ticketData, purchase) * 0.01).toFixed(2)}`;
+
+      if(extrasString.length > 0)
+      {
+        finalString += ` (${extrasString})`;
+      }
+
+      ticketReceipts.push(finalString);
+
+      total += calculateTicketPrice(ticketData, purchase) * 0.01;
+    }
+    else
+    {
+      return calculateTicketPrice(ticketData, purchase);
+    }
+  }
+
+  // Formatting all of the admissions into a string
+  let stringListOfAdmissions = "";
+
+  ticketReceipts.forEach((element,i)=>{
+    if(i !== ticketReceipts.length - 1)
+      stringListOfAdmissions += element + "\n";
+    else
+      stringListOfAdmissions += element;
+  });
+
+  // Formatting the final cost into a string
+  let stringTotal = `TOTAL: $${total.toFixed(2)}`;
+
+  return `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n${stringListOfAdmissions}\n-------------------------------------------\n${stringTotal}`;
+}
 
 // Do not change anything below this line.
 module.exports = {
