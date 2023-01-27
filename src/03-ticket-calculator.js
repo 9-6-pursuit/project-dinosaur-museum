@@ -54,7 +54,33 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let total = 0;
+
+  if (ticketData[ticketInfo.ticketType]){
+    if (!ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType]){
+      return `Entrant type 'incorrect-entrant' cannot be found.`
+    }
+    else if(ticketInfo.ticketType === "membership"){
+      total = ticketData.membership.priceInCents[ticketInfo.entrantType];
+    }
+    else{
+      total = ticketData.general.priceInCents[ticketInfo.entrantType];}
+    }
+  else{
+    return "Ticket type 'incorrect-type' cannot be found."
+  }
+
+    for (let x = 0; x < ticketInfo.extras.length; x++){
+      if (ticketInfo.extras[x] === "movie" || ticketInfo.extras[x] === "education" || ticketInfo.extras[x] === "terrace"){
+        total += ticketData.extras[ticketInfo.extras[x]].priceInCents[ticketInfo.entrantType];
+      }
+      else{
+        return "Extra type 'incorrect-extra' cannot be found."
+      }
+    }
+    return total
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +135,55 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  let sent = '';
+  let total = 0;
+  let extra = '';
+
+  for (let x = 0; x < purchases.length; x++){
+    let extra_sent = '';
+    let price = calculateTicketPrice(ticketData, purchases[x]);
+
+    if (typeof price != "number"){
+      return price;
+    }
+
+    price *= .01
+    let entrant = (purchases[x].entrantType).charAt(0).toUpperCase() + (purchases[x].entrantType).slice(1);
+    let type = (purchases[x].ticketType).charAt(0).toUpperCase() + (purchases[x].ticketType.slice(1));
+
+    for (let i = 0; i < purchases[x].extras.length; i++){
+      if (i === purchases[x].extras.length-1){
+        extra = (extra = purchases[x].extras[i]).charAt(0).toUpperCase() + (purchases[x].extras[i]).slice(1) + " Access";
+      }
+      else{
+        extra = (extra = purchases[x].extras[i]).charAt(0).toUpperCase() + (purchases[x].extras[i]).slice(1) + " Access, "
+      }
+      extra_sent += extra
+    }
+
+    if (x === purchases.length - 1){
+      if (!purchases[x].extras.length){
+        sent += `${entrant} ${type} Admission: $${price.toFixed(2)}`
+      }
+      else{
+        sent += `${entrant} ${type} Admission: $${price.toFixed(2)} (${extra_sent})`
+      }
+    }
+
+    else{
+      if (!purchases[x].extras.length){
+        sent += `${entrant} ${type} Admission: $${price.toFixed(2)}\n`
+      }
+      else{
+        sent += `${entrant} ${type} Admission: $${price.toFixed(2)} (${extra_sent})\n`
+      }
+    }
+    
+    total += price
+  }
+  return `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n${sent}\n-------------------------------------------\nTOTAL: $${total.toFixed(2)}`;
+}
 
 // Do not change anything below this line.
 module.exports = {
