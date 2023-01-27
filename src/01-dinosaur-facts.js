@@ -22,7 +22,23 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  //console.log(dinosaurs)
+  if (dinosaurs.length === 0) {
+    return {}
+  };
+  let tallestDino = {};
+  let bigGuy = dinosaurs[0];
+
+for (let i = 0; i < dinosaurs.length; i++) {
+  let dinosaur = dinosaurs[i];
+  if (dinosaur.lengthInMeters > bigGuy.lengthInMeters) {
+    bigGuy = dinosaur;
+  }
+}
+tallestDino[bigGuy.name] = bigGuy.lengthInMeters * 3.281;
+return tallestDino;
+};
 
 /**
  * getDinosaurDescription()
@@ -44,8 +60,17 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+  //console.log(dinosaurs)
+  let message = `A dinosaur with an ID of '${id}' cannot be found.`
 
+  for (const dinosaur of dinosaurs) {
+    if (dinosaur.dinosaurId === id) {
+      return `${dinosaur.name} (${dinosaur.pronunciation})\n${dinosaur.info} It lived in the ${dinosaur.period} period, over ${dinosaur.mya[dinosaur.mya.length - 1]} million years ago.`
+    }
+  }
+  return message
+  };
 /**
  * getDinosaursAliveMya()
  * ---------------------
@@ -63,15 +88,42 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  //> ["YLtkN9R37", "GGvO1X9Zeh", "BFjjLjea-O", "V53DvdhV2A"]
  *
  *  getDinosaursAliveMya(dinosaurs, 65);
- *  //> ["WHQcpcOj0G"]
+ *  //> ["WHQcpcOj0G"] = DINOSAURS.DINOSAUR-ID
  *
  *  getDinosaursAliveMya(dinosaurs, 65, "name");
- *  //> ["Dracorex"]
+ *  //> ["Dracorex"] = DINOSAURS.DINOSAUR-NAME
  *
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+  //console.log(dinosaurs[0])
+  let liveDino = [];
+///Loops through each dinosaur in the array, 
+  for (let dinosaur of dinosaurs) {
+//checking to see if it has a mya property with more than one value.
+    if (dinosaur.mya.length > 1) {
+      if (dinosaur.mya[0] >= mya && dinosaur.mya[1] <= mya) {
+//If so, it checks to see if that key exists in the dinosaur object
+        if (key in dinosaur) {
+          liveDino.push(dinosaur[key]); 
+        } else {
+//If not, it creates a new Dinosaur object with its own ID and pushes that into the liveDino array.
+          liveDino.push(dinosaur.dinosaurId)
+        };
+      };
+    } else if (dinosaur.mya.length === 1){
+      if (dinosaur.mya[0] === mya || dinosaur.mya[0] === mya + 1) {
+        if (key in dinosaur) {
+          liveDino.push(dinosaur[key]);
+        } else {
+          liveDino.push(dinosaur.dinosaurId);
+        };
+      };
+    };
+  };
+  return liveDino;
+};
 
 module.exports = {
   getLongestDinosaur,
