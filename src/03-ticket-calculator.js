@@ -152,8 +152,8 @@ function calculateTicketPrice(ticketData, ticketInfo)
  */
 function purchaseTickets(ticketData, purchases)
 {
-  // We'll be storing all of our admissions in this
-  let ticketReceipts = [];
+  // Formatting all of the admissions into a string
+  let stringListOfAdmissions = "";
 
   // This will be formatted a string at the end of the function
   let total = 0;
@@ -161,14 +161,6 @@ function purchaseTickets(ticketData, purchases)
   // Looping through the ticket purchases to get the cost and admissions
   for (const purchase of purchases)
   {
-    /* 
-       I was using this for hours, trying to figure out why it wasn't working lol
-       if(Number.isNaN(calculateTicketPrice(ticketData, purchase)))
-       {
-        return calculateTicketPrice(ticketData, purchase);
-       } 
-    */
-
     if(typeof calculateTicketPrice(ticketData, purchase) === 'number')
     {
       let entrantString = purchase.entrantType[0].toUpperCase() + purchase.entrantType.slice(1, purchase.entrantType.length);
@@ -178,20 +170,20 @@ function purchaseTickets(ticketData, purchases)
       let extrasString = "";
 
       purchase.extras.map((extra, index)=>{
-        if(index + 1 === purchase.extras.length && ticketData.extras[extra].description)
+        if(index + 1 === purchase.extras.length)
           extrasString += ticketData.extras[extra].description;
         else if(index + 1 !== purchase.extras.length)
           extrasString += ticketData.extras[extra].description + ", "
       });
 
-      let finalString = `${entrantString} ${ticketTypeString} Admission: $${(calculateTicketPrice(ticketData, purchase) * 0.01).toFixed(2)}`;
-
       if(extrasString.length > 0)
       {
-        finalString += ` (${extrasString})`;
+        stringListOfAdmissions += `${entrantString} ${ticketTypeString} Admission: $${(calculateTicketPrice(ticketData, purchase) * 0.01).toFixed(2)} (${extrasString})\n`;
       }
-
-      ticketReceipts.push(finalString);
+      else
+      {
+        stringListOfAdmissions += `${entrantString} ${ticketTypeString} Admission: $${(calculateTicketPrice(ticketData, purchase) * 0.01).toFixed(2)}\n`;
+      }
 
       total += calculateTicketPrice(ticketData, purchase) * 0.01;
     }
@@ -200,21 +192,7 @@ function purchaseTickets(ticketData, purchases)
       return calculateTicketPrice(ticketData, purchase);
     }
   }
-
-  // Formatting all of the admissions into a string
-  let stringListOfAdmissions = "";
-
-  ticketReceipts.forEach((element,i)=>{
-    if(i !== ticketReceipts.length - 1)
-      stringListOfAdmissions += element + "\n";
-    else
-      stringListOfAdmissions += element;
-  });
-
-  // Formatting the final cost into a string
-  let stringTotal = `TOTAL: $${total.toFixed(2)}`;
-
-  return `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n${stringListOfAdmissions}\n-------------------------------------------\n${stringTotal}`;
+  return `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n${stringListOfAdmissions}-------------------------------------------\nTOTAL: $${total.toFixed(2)}`;
 }
 
 // Do not change anything below this line.
