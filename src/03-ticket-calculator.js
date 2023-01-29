@@ -54,7 +54,43 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let basePrice = 0;
+  let extrasPrice = 0;
+  let ticketType = ticketInfo['ticketType'];
+  let entrantType = ticketInfo['entrantType'];
+  let extras = ticketInfo['extras'];
+
+  // Check the ticket type 
+  if(ticketData.hasOwnProperty(ticketType)){
+      basePrice = ticketData[ticketType]['priceInCents'][entrantType];
+  }else{
+      return `Ticket type '${ticketType}' cannot be found.`;//'incorrect-entrant'
+  }
+
+  // Check the entrant type 
+  if(basePrice === undefined){
+      return `Entrant type '${entrantType}' cannot be found.`;//'incorrect-extra'
+  }
+
+  // Check if any extras
+  if(extras.length > 0){
+      for (let i of extras) {
+          // Check if the extra exists
+          if(ticketData['extras'].hasOwnProperty(i)){
+              extrasPrice += ticketData['extras'][i]['priceInCents'][entrantType];
+          }else{
+              return `Extra type '${i}' cannot be found.`;
+          }
+      }
+  }
+
+  // Calculate total price
+  let totalPrice = basePrice + extrasPrice;
+  return totalPrice;
+
+
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +145,48 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+    // Function capitalWord for the first letter of a word
+    function capitalWord(word) {
+      if (typeof word === "string") {
+        return word[0].toUpperCase() + word.slice(1);
+      }
+      return word;
+    }
+  
+    let result = "";
+    let total = 0;
+
+    for (let purchase of purchases) {
+      // Get ticket price
+      let ticketPrice = calculateTicketPrice(ticketData, purchase);
+      if (typeof ticketPrice !== "number") {
+        return ticketPrice;
+      }
+      // Add ticket price to total
+      total += ticketPrice;
+  
+      let subExtras = "";
+
+      for (let i = 0; i < purchase.extras.length; i++) {
+        if (i === 0) {
+          subExtras += " (";
+        }
+        subExtras += capitalWord(purchase.extras[i]) + " Access";// Capitalize add to the string
+
+        if (i === purchase.extras.length - 1) {
+          subExtras += ")";
+        } else {
+          subExtras += ", ";
+        }
+      }
+  
+      result += `${capitalWord(purchase.entrantType)} ${capitalWord(purchase.ticketType)} Admission: $${(ticketPrice / 100).toFixed(2)}${subExtras}\n`;
+    }
+   
+    return `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n${result}-------------------------------------------\nTOTAL: $${(total / 100).toFixed(2)}`;
+  
+}
 
 // Do not change anything below this line.
 module.exports = {
