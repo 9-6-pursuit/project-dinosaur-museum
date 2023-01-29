@@ -54,7 +54,27 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  if (!ticketData[ticketInfo.ticketType]) {
+    return `Ticket type '${ticketInfo.ticketType}' cannot be found.`;
+  }
+  if (!ticketData.general.priceInCents[ticketInfo.entrantType]) {
+    return `Entrant type '${ticketInfo.entrantType}' cannot be found.`;
+  }
+  for (const extra of ticketInfo.extras) {
+    if (!ticketData.extras[extra]) {
+      return `Extra type '${extra}' cannot be found.`;
+    }
+  }
+
+  let totalPrice = ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType];
+  if (ticketInfo.extras.length !== 0) {
+    for (const extra of ticketInfo.extras) {
+      totalPrice += ticketData.extras[extra].priceInCents[ticketInfo.entrantType];
+    }
+  }
+  return totalPrice;
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +129,48 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  for (const ticket of purchases) {
+    if (!ticketData[ticket.ticketType]) {
+      return `Ticket type '${ticket.ticketType}' cannot be found.`;
+    }
+    if (!ticketData.general.priceInCents[ticket.entrantType]) {
+      return `Entrant type '${ticket.entrantType}' cannot be found.`;
+    }
+    for (const extra of ticket.extras) {
+      if (!ticketData.extras[extra]) {
+        return `Extra type '${extra}' cannot be found.`;
+      }
+    }
+  }
+
+  let grandTotal = 0;
+  let finalMsg = "Thank you for visiting the Dinosaur Museum!\n-------------------------------------------";
+  for (const ticket of purchases) {
+    let totalPrice = ticketData[ticket.ticketType].priceInCents[ticket.entrantType];
+    if (ticket.extras.length !== 0) {
+      let extraMsg = "(";
+      for (let i = 0; i < ticket.extras.length; i++) {
+        totalPrice += ticketData.extras[ticket.extras[i]].priceInCents[ticket.entrantType];
+        if (i === ticket.extras.length - 1) {
+          extraMsg += ticketData.extras[ticket.extras[i]].description + ")";
+        }
+        else {
+          extraMsg += ticketData.extras[ticket.extras[i]].description + ", ";
+        }
+      }
+      totalPrice = totalPrice / 100;
+      finalMsg += `\n${ticket.entrantType.charAt(0).toUpperCase() + ticket.entrantType.slice(1)} ${ticketData[ticket.ticketType].description}: $${totalPrice.toFixed(2)} ${extraMsg}`;
+    }
+    else {
+      totalPrice = totalPrice / 100;
+      finalMsg += `\n${ticket.entrantType.charAt(0).toUpperCase() + ticket.entrantType.slice(1)} ${ticketData[ticket.ticketType].description}: $${totalPrice.toFixed(2)}`;
+    }
+    grandTotal += totalPrice;
+  }
+  finalMsg += `\n-------------------------------------------\nTOTAL: $${grandTotal.toFixed(2)}`;
+  return finalMsg;
+}
 
 // Do not change anything below this line.
 module.exports = {
