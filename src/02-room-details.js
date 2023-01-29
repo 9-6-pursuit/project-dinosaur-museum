@@ -25,7 +25,38 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+let dinosaur;
+for (let i = 0; i < dinosaurs.length; i++) {
+    if (dinosaurs[i].name === dinosaurName) {
+        dinosaur = dinosaurs[i];
+        break;
+    }
+} if (!dinosaur) {
+    return "Dinosaur with name '" + dinosaurName + "' cannot be found.";
+} for (const room of rooms) {
+  if (room.dinosaurs.includes(dinosaur)) {
+    return room.name;
+  }
+}
+return "Dinosaur with name '" + dinosaurName + "' cannot be found in any rooms.";
+};
+
+
+
+// const dinosaur = dinosaurs.find(d => d.id === dinosaurName);
+// if (!dinosaur) return "Error: Dinosaur not found in dinosaurs list";
+
+// for (const room of rooms) {
+//   if (room.dinosaurs.includes(dinosaur.id)) {
+//     return room.name;
+//   }
+// }
+
+// return "Error: Dinosaur not found in any room";
+
+
+
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +80,29 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+function getConnectedRoomNamesById(rooms, id) {
+  let connectedRooms = []
+  let initialRoom = rooms.find(room => room.roomId) ;
+  if (!initialRoom) return " Initial room ID not found";
+  initialRoom.connectsTo.forEach( roomId => {
+    let connectedRoom = rooms.find(room => room.roomId === roomId);
+    if (!connectedRoom) {
+      connectedRooms.push(`Connected room ID ${roomId} not found`);
+    } else {
+      connectedRooms.push(connectedRoom.name);
+    }
+  });
+  return connectedRooms;
+}
+
+// let room = rooms.find (r => r.roomID === id);
+// if (!room) return "Error: Room ID not found";
+
+// let connectedRooms = room.connectsTo.map(connectedID => {
+//   let connectedRoom = rooms.find ( r => r.roomId === connectedId);
+//   if (!connectedRoom) return "Error; Connected Room ID not found"
+// });
+// return connectedRooms;
 
 module.exports = {
   getRoomByDinosaurName,
