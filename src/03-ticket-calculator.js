@@ -60,23 +60,20 @@ function calculateTicketPrice(ticketData, ticketInfo) {
   const entrantTypes = Object.keys(ticketData.general.priceInCents);
   const extraTypes = Object.keys(ticketData.extras);
 
-  // checks if ticketType exists
+  
   if (!ticketTypes.includes(ticketType)) {
     return "Ticket type 'incorrect-type' cannot be found.";
   }
 
-  // checks if entrantType exists
   if (!entrantTypes.includes(entrantType)) {
     return "Entrant type 'incorrect-entrant' cannot be found.";
   }
 
-  // calculates ticket price without extras
-  let ticketPrice = ticketData[ticketType].priceInCents[entrantType];
+ let ticketPrice = ticketData[ticketType].priceInCents[entrantType];
 
-  // adds extra prices
-  if (extras) {
+ if (extras) {
     for (let extra of extras) {
-      // checks if extra exists
+    
       if (!extraTypes.includes(extra)) {
         return "Extra type 'incorrect-extra' cannot be found.";
       }
@@ -88,7 +85,6 @@ function calculateTicketPrice(ticketData, ticketInfo) {
 
   return ticketPrice;
 }
-
 
 
   
