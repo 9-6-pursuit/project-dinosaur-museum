@@ -35,7 +35,7 @@ for (let i = 0; i < dinosaurs.length; i++) {
 } if (!dinosaur) {
     return "Dinosaur with name '" + dinosaurName + "' cannot be found.";
 } for (const room of rooms) {
-  if (room.dinosaurs.includes(dinosaur)) {
+  if (room.dinosaurs.includes(dinosaur.dinosaurId)) {
     return room.name;
   }
 }
