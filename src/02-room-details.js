@@ -81,19 +81,28 @@ return "Dinosaur with name '" + dinosaurName + "' cannot be found in any rooms."
     ]
  */
 function getConnectedRoomNamesById(rooms, id) {
-  let connectedRooms = []
-  let initialRoom = rooms.find(room => room.roomId) ;
-  if (!initialRoom) return " Initial room ID not found";
-  initialRoom.connectsTo.forEach( roomId => {
-    let connectedRoom = rooms.find(room => room.roomId === roomId);
-    if (!connectedRoom) {
-      connectedRooms.push(`Connected room ID ${roomId} not found`);
-    } else {
-      connectedRooms.push(connectedRoom.name);
-    }
-  });
-  return connectedRooms;
+
+  
 }
+
+
+// let connectedRooms = [];
+// let room = rooms.find(room => room.roomId === id);
+// if (!room) {
+//   return "Error: Room not found";
+// }
+// const searchRooms = (room, connectedRooms) => {
+//   for (const roomId of room.connectsTo) {
+//     let connectedRoom = rooms.find(room => room.roomId === roomId);
+//     if (!connectedRoom) {
+//       return "Error: Connected room not found";
+//     }
+//     connectedRooms.push(connectedRoom.name);
+//     searchRooms(connectedRoom, connectedRooms);
+//   }
+// };
+// searchRooms(room, connectedRooms);
+// return connectedRooms;
 
 // let room = rooms.find (r => r.roomID === id);
 // if (!room) return "Error: Room ID not found";
