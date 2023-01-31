@@ -5,6 +5,7 @@
 
   Keep in mind that your functions must still have and use a parameter for accepting all tickets.
 */
+const { extras } = require("../data/tickets");
 const exampleTicketData = require("../data/tickets");
 // Do not change the line above.
 
@@ -54,7 +55,35 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+
+
+
+function calculateTicketPrice(ticketData, ticketInfo) {
+  
+
+  if (!ticketData[ticketInfo.ticketType]) {
+     return `Ticket type '${ticketInfo.ticketType}' cannot be found.` 
+  }
+
+  if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior") {
+    return `Entrant type '${ticketInfo.entrantType}' cannot be found.` 
+  }
+
+  let ticketPrice = ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType];
+
+ 
+  for (const extra of ticketInfo.extras) {
+    if (!ticketData.extras[extra]) {
+    return `Extra type '${extra}' cannot be found.` 
+
+    }
+    ticketPrice += ticketData.extras[extra].priceInCents[ticketInfo.entrantType];
+  }
+
+  return ticketPrice;
+}
+
+
 
 /**
  * purchaseTickets()
@@ -109,10 +138,151 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+
+    //function purchaseTickets(ticketData, purchases) {}
+
+    
+
+function purchaseTickets(ticketData, purchases) {
+
+  // console.log(purchases)
+  for (i = 0; i < purchases.length; i ++){
+    if (!ticketData[purchases[i].ticketType]){
+      return `Ticket type '${purchases[i].ticketType}' cannot be found.`
+    } else if (!ticketData.general.priceInCents[purchases[i].entrantType]){
+      return `Entrant type '${purchases[i].entrantType}' cannot be found.`
+    } 
+    for (element in purchases[i].extras){
+      if(!ticketData.extras[purchases[i].extras[element]]){
+        return `Extra type '${purchases[i].extras}' cannot be found.`
+      }
+    }
+  }
+  
+  let price = 0
+  let totalPrice = 0
+  let receipt = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`
+  // console.log(purchases)
+  for (let i = 0; i < purchases.length; i++) {
+    if (purchases[i].extras.length === 0){
+      if (purchases[i].ticketType === "general"){
+        if (purchases[i].entrantType === "child"){
+          price = (ticketData[purchases[i].ticketType].priceInCents.child)
+          totalPrice += price
+          receipt += `\nChild ${ticketData.general.description}: $${(price / 100).toFixed(2)}`
+
+        }else if (purchases[i].entrantType === "adult"){
+          price = ticketData[purchases[i].ticketType].priceInCents.adult
+          totalPrice += price
+          receipt += `\nAdult ${ticketData.general.description}: $${(price / 100).toFixed(2)}`
+          // console.log(purchases[i].extras.length)
+  
+        }else if (purchases[i].entrantType === "senior") {
+          price = ticketData[purchases[i].ticketType].priceInCents.senior
+          totalPrice += price
+          receipt += `\nSenior ${ticketData.general.description}: $${(price / 100).toFixed(2)}`
+
+        }
+      } else if (purchases[i].ticketType === "membership"){
+        if (purchases[i].entrantType === "child"){
+          price = (ticketData[purchases[i].ticketType].priceInCents.child)
+          totalPrice += price
+          receipt += `\nChild ${ticketData.membership.description}: $${(price / 100).toFixed(2)}`
+
+        }else if (purchases[i].entrantType === "adult"){
+          price = ticketData[purchases[i].ticketType].priceInCents.adult
+          totalPrice += price
+          receipt += `\nAdult ${ticketData.membership.description}: $${(price / 100).toFixed(2)}`
+
+        }else if (purchases[i].entrantType === "senior") {
+          price = ticketData[purchases[i].ticketType].priceInCents.senior
+          totalPrice += price
+          receipt += `\nSenior ${ticketData.membership.description}: $${(price / 100).toFixed(2)}`
+       }
+      }
+    }
+  }
+
+  for (let i = 0; i < purchases.length; i++) {
+    price = 0
+    if (purchases[i].extras.length > 0){
+
+      let extrasArray = []
+      
+      for (let x = 0; x < purchases[i].extras.length; x++){
+        
+        if (purchases[i].extras[x] === "education"){
+          extrasArray.push(ticketData.extras.education.description)
+          if (purchases[i].entrantType === "child"){
+            price += ticketData.extras.education.priceInCents.child
+          } else if (purchases[i].entrantType === "adult"){
+            price += ticketData.extras.education.priceInCents.adult
+          } else if (purchases[i].entrantType === "senior"){
+            price += ticketData.extras.education.priceInCents.senior
+          }
+        } else if (purchases[i].extras[x] === "movie"){
+          extrasArray.push(ticketData.extras.movie.description)
+          if (purchases[i].entrantType === "child"){
+          price += ticketData.extras.movie.priceInCents.child
+          } else if (purchases[i].entrantType === "adult"){
+          price += ticketData.extras.movie.priceInCents.adult
+          } else if (purchases[i].entrantType === "senior"){
+            price += ticketData.extras.movie.priceInCents.senior
+          }
+        } else if (purchases[i].extras[x] === "terrace") {
+          extrasArray.push(ticketData.extras.terrace.description)
+          if (purchases[i].entrantType === "child"){
+            price += ticketData.extras.terrace.priceInCents.child
+          } else if (purchases[i].entrantType === "adult"){
+            price += ticketData.extras.terrace.priceInCents.adult
+          } else if (purchases[i].entrantType === "senior"){
+            price += ticketData.extras.terrace.priceInCents.senior
+           }
+        }
+      }
+
+
+      if (purchases[i].ticketType === "general"){
+        if (purchases[i].entrantType === "child"){
+          price += ticketData[purchases[i].ticketType].priceInCents.child
+          totalPrice += price
+          receipt += `\nChild ${ticketData.general.description}: $${(price / 100).toFixed(2)} (${extrasArray.toString().split(",").join(", ")})`
+        } else if (purchases[i].entrantType === "adult"){
+          price += ticketData[purchases[i].ticketType].priceInCents.adult
+          totalPrice += price
+          receipt += `\nAdult ${ticketData.general.description}: $${(price / 100).toFixed(2)} (${extrasArray.toString().split(",").join(", ")})`
+        } else if (purchases[i].entrantType === "senior"){
+          price += ticketData[purchases[i].ticketType].priceInCents.senior
+          totalPrice += price
+          receipt += `\nSenior ${ticketData.general.description}: $${(price / 100).toFixed(2)} (${extrasArray.toString().split(",").join(", ")})`
+        }
+      } else if (purchases[i].ticketType === "membership"){
+        if (purchases[i].entrantType === "child"){
+          price += ticketData[purchases[i].ticketType].priceInCents.child
+          totalPrice += price
+          receipt += `\nChild ${ticketData.membership.description}: $${(price / 100).toFixed(2)} (${extrasArray.toString().split(",").join(", ")})`
+        } else if (purchases[i].entrantType === "adult"){
+          price += ticketData[purchases[i].ticketType].priceInCents.adult
+          totalPrice += price
+          receipt += `\nAdult ${ticketData.membership.description}: $${(price / 100).toFixed(2)} (${extrasArray.toString().split(",").join(", ")})`
+        } else if (purchases[i].entrantType === "senior"){
+          price += ticketData[purchases[i].ticketType].priceInCents.senior
+          totalPrice += price
+          receipt += `\nSenior ${ticketData.membership.description}: $${(price / 100).toFixed(2)} (${extrasArray.toString().split(",").join(", ")})`
+        }
+      }
+    }
+  }
+
+  return receipt + `\n-------------------------------------------\nTOTAL: $${(totalPrice / 100).toFixed(2)}`
+  // return `TOTAL: $${(price / 100).toFixed(2)}`
+  
+    
+}
 
 // Do not change anything below this line.
 module.exports = {
   calculateTicketPrice,
   purchaseTickets,
 };
+
