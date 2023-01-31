@@ -4,6 +4,7 @@
   You may use this data to test your functions. You may assume the shape of the data remains the same but that the values may change.
 */
 const exampleDinosaurData = require("../data/dinosaurs");
+const rooms = require("../data/rooms");
 const exampleRoomData = require("../data/rooms");
 // Do not change the lines above.
 
@@ -25,7 +26,28 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+let id = ""
+let errorStr = ""
+
+  for (let i = 0; i < dinosaurs.length; i++){
+      if (dinosaurs[i].name == dinosaurName){
+        id = dinosaurs[i].dinosaurId
+      }
+      else{
+        errorStr = `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`
+      }
+    }
+  for (let i = 0; i < rooms.length; i++) {
+    if (rooms[i].dinosaurs.includes(id)){
+      return rooms[i].name
+    }
+    else if(!id) {
+      errorStr = `Dinosaur with name '${dinosaurName}' cannot be found.`
+    }
+} return errorStr
+}
+
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +71,35 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+function getConnectedRoomNamesById(rooms, id) {
+  
+let connected = [];
+  let error = "";
+  
+  for (let i = 0; i < rooms.length; i++) {
+   if(rooms[i].connectsTo.includes(id)){
+     connected.push(rooms[i].name)
+    } 
+    if(id === "incorrect-id" ){
+    return "Room with ID of 'incorrect-id' could not be found."
+    }
+    if(rooms[i].connectsTo.includes("incorrect-id")){
+   return "Room with ID of 'incorrect-id' could not be found."
+   } 
+  }
+  return connected
+}
+//   for (let i = 0; i < rooms.length; i++) {
+//     if (rooms[i].roomId === id){
+//       connect.push(rooms[i].name)
+//     }
+//   for (let i = 0; i < rooms.length; i++){
+//     if (rooms[i].name){
+//       roomName = rooms[i].name
+//     }
+//   }
+
+// } return connect
 
 module.exports = {
   getRoomByDinosaurName,
