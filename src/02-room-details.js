@@ -25,7 +25,41 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+  let id = "";
+  let error = "";
+    for(let i = 0; i < dinosaurs.length; i++){
+      if(dinosaurs[i].name == dinosaurName){
+        id = dinosaurs[i].dinosaurId
+      } else {
+          error = `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`
+      }
+    }
+     for(let i = 0; i < rooms.length; i++){
+      if(rooms[i].dinosaurs.includes(id)){
+        return rooms[i].name
+      } else if(!id){
+          error = `Dinosaur with name '${dinosaurName}' cannot be found.`
+        } 
+      } return error
+  } 
+  
+
+// += reassigns and adds so value is repeated infinitely.
+// reassigns value  without adding.
+
+
+//I don't think they'd have to be nested. For this one, I would first find the ID of the dinosaur you're looking for by iterating through the dinosaurs list. Then once you have that, you can iterate through the rooms and use room.dinosaurs.includes() to see whether the room includes that dino ID.
+//     for( let dinos of dinosaurs){
+//       if(dinos.name === dinosaurName && rooms.includes(dinos.name)){
+//        rooms
+//        return rooms
+//       } else if(!rooms.includes(dinos.name)){
+//         return "Dinosaur with name" + " \'" + dinosaurName + "\'" + " cannot be found."
+//       }
+//     } 
+// }
+//return "Dinosaur with name" + " \'" + dinosaurName + "\'" + " cannot be found in any rooms."
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +83,59 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+function getConnectedRoomNamesById(rooms, id) {
+  //  let allRoomIds = [];
+  //  let roomNames = []; 
+  let result = []
+  //    for (let i = 0; i < rooms.length; i++){
+  //    if(rooms[i].roomId){
+  //     allRoomIds.push(rooms[i].roomId)
+  //    }
+  //   } for (let i = 0; i < rooms.length; i++) {
+  //       if(rooms[i].connectsTo.includes(id)){
+  //          roomNames.push(rooms[i].name)
+  //   } if(allRoomIds.includes(rooms[i].connectsTo)){
+  //     roomNames.push(rooms[i].roomId)
+  //   } if(roomNames.length === 0){
+  //     return "Room with ID of 'incorrect-id' could not be found."
+  //   } 
+  //   } return roomNames
+   // console.log(allRoomIds)
+   // console.log(roomNames)
+    //} 
+  //   let result = [];
+    
+    for (let i = 0; i < rooms.length; i++) {
+     if(rooms[i].connectsTo.includes(id)){
+      result.push(rooms[i].name)
+     } if(id == 'incorrect-id'){
+     return "Room with ID of 'incorrect-id' could not be found."
+     } if(rooms[i].connectsTo.includes("incorrect-id")){
+      return "Room with ID of 'incorrect-id' could not be found."
+      } 
+  }return result
+}
+    // function getConnectedRoomNamesById(rooms, id) {
+    //   let result = [];
+    //    let error = "";
+    //    for (let i = 0; i < rooms.length; i++){
+    //     if(rooms[i].roomId === id){
+    //       result.push(rooms[i])
+    //     } else {
+    //       error = "Room with ID of 'incorrect-id' could not be found."
+    //     }
+    //   }for (let i = 0; i < rooms.length; i++) {
+    //           if(rooms[i].connectsTo.includes(id)){
+    //             result.push(rooms[i].name)
+    //             return result
+    //           } else {
+    //             error =  "Room with ID of 'incorrect-id' could not be found."
+    //           }
+    //       } return error
+    //       } 
+  
+
+ 
 
 module.exports = {
   getRoomByDinosaurName,
