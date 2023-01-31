@@ -5,6 +5,7 @@
 
   Keep in mind that your functions must still have and use a parameter for accepting all tickets.
 */
+const tickets = require("../data/tickets");
 const exampleTicketData = require("../data/tickets");
 // Do not change the line above.
 
@@ -54,7 +55,32 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  
+    let result;
+    let type = ticketInfo.ticketType
+    let entrant = ticketInfo.entrantType
+    let extra = ticketInfo.extras
+    let extraData = ticketData.extras
+
+  if (!ticketData[type]){
+    return `Ticket type '${type}' cannot be found.`
+  } else if (!(ticketData[type].priceInCents[entrant]) ){
+    return `Entrant type '${entrant}' cannot be found.`
+  } 
+
+  result = ticketData[type].priceInCents[entrant]
+
+  for (const x of extra){
+    if (!extraData[x]){
+      return `Extra type '${extra}' cannot be found.`
+    } else {
+      result += extraData[x].priceInCents[entrant]
+    }
+  }
+    return result
+  
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +135,24 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  
+  // console.log(purchases)
+  // let result = "Thank you for visiting the Dinosaur Museum!\n-------------------------------------------"
+  // let type = purchases.ticketType
+  // let person = purchases.entrantType
+  // let xtra = purchases.extras
+
+  // if (!(tickets[type])){
+  //   return "Ticket type 'incorrect-type' cannot be found."
+  // }else if (!tickets[person]){
+  //   return  "Entrant type 'incorrect-entrant' cannot be found."
+  // }
+  // if (type === "general"){
+  // return result += `\nAdult General Admission: $${[type].priceInCents[person]
+  // }.00\n-------------------------------------------\nTOTAL: $${[type].priceInCents[person]}`
+  // }
+}
 
 // Do not change anything below this line.
 module.exports = {
