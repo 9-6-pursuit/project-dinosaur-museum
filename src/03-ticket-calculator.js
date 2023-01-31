@@ -68,10 +68,8 @@ function calculateTicketPrice(ticketData, ticketInfo) {
   }
 
   let totalPrice = ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType];
-  if (ticketInfo.extras.length !== 0) {
-    for (const extra of ticketInfo.extras) {
-      totalPrice += ticketData.extras[extra].priceInCents[ticketInfo.entrantType];
-    }
+  for (const extra of ticketInfo.extras) {
+    totalPrice += ticketData.extras[extra].priceInCents[ticketInfo.entrantType];
   }
   return totalPrice;
 }
@@ -130,46 +128,33 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     //> "Ticket type 'discount' cannot be found."
  */
 function purchaseTickets(ticketData, purchases) {
+  let totalCost = 0;
+  let finalReceipt = "Thank you for visiting the Dinosaur Museum!\n-------------------------------------------";
   for (const ticket of purchases) {
-    if (!ticketData[ticket.ticketType]) {
-      return `Ticket type '${ticket.ticketType}' cannot be found.`;
+    let ticketPrice = calculateTicketPrice(ticketData, ticket);
+    if (typeof ticketPrice !== "number") {
+      return ticketPrice;
     }
-    if (!ticketData.general.priceInCents[ticket.entrantType]) {
-      return `Entrant type '${ticket.entrantType}' cannot be found.`;
-    }
-    for (const extra of ticket.extras) {
-      if (!ticketData.extras[extra]) {
-        return `Extra type '${extra}' cannot be found.`;
-      }
-    }
-  }
+    ticketPrice /= 100;
+    totalCost += ticketPrice;
 
-  let grandTotal = 0;
-  let finalMsg = "Thank you for visiting the Dinosaur Museum!\n-------------------------------------------";
-  for (const ticket of purchases) {
-    let totalPrice = ticketData[ticket.ticketType].priceInCents[ticket.entrantType];
-    if (ticket.extras.length !== 0) {
-      let extraMsg = "(";
-      for (let i = 0; i < ticket.extras.length; i++) {
-        totalPrice += ticketData.extras[ticket.extras[i]].priceInCents[ticket.entrantType];
-        if (i === ticket.extras.length - 1) {
-          extraMsg += ticketData.extras[ticket.extras[i]].description + ")";
-        }
-        else {
-          extraMsg += ticketData.extras[ticket.extras[i]].description + ", ";
-        }
+    let extraAccess = "";
+    for (let i = 0; i < ticket.extras.length; i++) {
+      if (i === 0) {
+        extraAccess += " (";
       }
-      totalPrice = totalPrice / 100;
-      finalMsg += `\n${ticket.entrantType.charAt(0).toUpperCase() + ticket.entrantType.slice(1)} ${ticketData[ticket.ticketType].description}: $${totalPrice.toFixed(2)} ${extraMsg}`;
+      extraAccess += ticketData.extras[ticket.extras[i]].description;
+      if (i === ticket.extras.length - 1) {
+        extraAccess += ")";
+      }
+      else {
+        extraAccess += ", ";
+      }
     }
-    else {
-      totalPrice = totalPrice / 100;
-      finalMsg += `\n${ticket.entrantType.charAt(0).toUpperCase() + ticket.entrantType.slice(1)} ${ticketData[ticket.ticketType].description}: $${totalPrice.toFixed(2)}`;
-    }
-    grandTotal += totalPrice;
+    finalReceipt += `\n${ticket.entrantType.charAt(0).toUpperCase() + ticket.entrantType.slice(1)} ${ticketData[ticket.ticketType].description}: $${ticketPrice.toFixed(2)}${extraAccess}`;
   }
-  finalMsg += `\n-------------------------------------------\nTOTAL: $${grandTotal.toFixed(2)}`;
-  return finalMsg;
+  finalReceipt += `\n-------------------------------------------\nTOTAL: $${totalCost.toFixed(2)}`;
+  return finalReceipt;
 }
 
 // Do not change anything below this line.
