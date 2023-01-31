@@ -5,6 +5,7 @@
 
   Keep in mind that your functions must still have and use a parameter for accepting all tickets.
 */
+const { extras } = require("../data/tickets");
 const exampleTicketData = require("../data/tickets");
 // Do not change the line above.
 
@@ -54,7 +55,53 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+
+if (!ticketData.hasOwnProperty(ticketInfo.ticketType)){
+  return  `Ticket type '${ticketInfo.ticketType}' cannot be found.`
+} 
+if (!ticketData[ticketInfo.ticketType].priceInCents.hasOwnProperty(ticketInfo.entrantType)){
+  return  `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+} 
+for (let extra = 0; extra < ticketInfo.extras.length; extra++) {
+  const extras = ticketInfo.extras[extra];
+  if (!ticketData.extras.hasOwnProperty(extras)){
+  return `Extra type '${extras}' cannot be found.`;
+}
+}
+
+ if ((ticketInfo.ticketType === "general") && (ticketInfo.extras.length === 0)){
+  if (ticketInfo.entrantType === "child") {
+    return 2000;
+  } else if (ticketInfo.entrantType === "adult") {
+    return 3000;
+  } else if (ticketInfo.entrantType === "senior") {
+    return 2500;
+ }
+}
+if ((ticketInfo.ticketType === "membership") && (ticketInfo.extras.length === 0)){
+  if (ticketInfo.entrantType === "child") {
+    return 1500;
+  } else if (ticketInfo.entrantType === "adult") {
+    return 2800;
+  } else if (ticketInfo.entrantType === "senior") {
+    return 2300;
+ }
+}
+
+let price = 0;
+
+price += ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType];
+
+for (let i = 0; i < ticketInfo.extras.length; i++) {
+      const addOn = ticketInfo.extras[i];
+     price += ticketData.extras[addOn].priceInCents[ticketInfo.entrantType];
+}
+
+  return price;
+
+
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +156,41 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  let fullPrice = 0
+
+
+  let receipt = "Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n"
+  for (let purchase of purchases) {
+    let price = calculateTicketPrice(ticketData, purchase)
+    
+   
+
+    if (typeof price === "string"){
+      return price
+    }
+
+  let extraExtra = []
+  let extras = ""
+   
+    for (let extra of purchase.extras) {
+      extraExtra.push(ticketData.extras[extra].description)
+    }
+    if (purchase.extras.length){
+      extras = ` (${extraExtra.join(", ")})`
+    }
+
+
+    fullPrice += price
+   
+    receipt += `${purchase.entrantType[0].toUpperCase()+(purchase.entrantType.slice(1))} ${ticketData[purchase.ticketType].description}: $${(price/100).toFixed(2)}${extras}\n`
+    
+  }
+    receipt += `-------------------------------------------\nTOTAL: $${(fullPrice/100).toFixed(2)}`
+  return receipt
+}
+
+
 
 // Do not change anything below this line.
 module.exports = {
