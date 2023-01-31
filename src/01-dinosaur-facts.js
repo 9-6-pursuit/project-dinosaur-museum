@@ -105,12 +105,33 @@ function getDinosaurDescription(dinosaurs, id) {
  */
 function getDinosaursAliveMya(dinosaurs, mya, key) {
   
+  // let dinosaurArray = []//blank array
+  // for (let index = 0; index < dinosaurs.length; index++) {
+  //   if (dinosaurs[i].mya.length === 2){
+  //     if (dinosaurs)
+  //   }
+    
+  // I FIGURED IT OUT. WE COULDNT GET THROUGH THE TOP SOLUTION. I COMMENTED OUT THE WRONG CORRECT SOLUTION. I WAS PANICKING.
+
+
   let dinosaurArray = []//blank array
+
   for (let index = 0; index < dinosaurs.length; index++) {
-    if (dinosaurs[i].mya.length === 2){
-  }
+  if(dinosaurs[index].mya.includes(mya)||dinosaurs[index].mya[0] > mya && dinosaurs[index].mya[1]< mya || dinosaurs[index].mya.length === 1 && dinosaurs[index].mya-1  === mya ){
+   //Although MYA at both indexes show when the dinosaurs lived, index 1 demonstrates when they both lived and died. Dinosaurs with only index 0 lived at that specific year. Checks to see if there are two MYAs in the range of lived and died. If there is only one number, it will check to see if the MYA is within the specified MYA range.
+
+    if(!key) {
+
+            dinosaurArray.push(dinosaurs[index].dinosaurId)
+          } else {
+            dinosaurArray.push(dinosaurs[index][key])
+          }   
+  }// For dinosaurs that lived during the `mya` value given, will return the value of the supplied key. Otherwise, returns the ID.
 }
+  return dinosaurArray
+
 }
+
 
 module.exports = {
   getLongestDinosaur,
