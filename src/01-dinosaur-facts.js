@@ -22,7 +22,51 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  
+  let longObj = {}
+  let tempLength = 0
+  let longDinoName = null
+
+  if (dinosaurs.length === 0) {
+    return longObj
+  }
+  
+  for (let i = 0; i < dinosaurs.length; i++) {
+    
+    if (tempLength < dinosaurs[i].lengthInMeters) {
+      longDinoName = dinosaurs[i]
+      tempLength = longDinoName.lengthInMeters
+    }
+  }
+  longObj[longDinoName.name] = longDinoName.lengthInMeters * 3.281
+
+  return longObj
+}
+
+//   let longObj = {}
+//   let lenghtInFeet = 0
+//   let tempLongest
+
+//   for (let i = 0; i < dinosaurs.length; i++) {
+  
+//   if (dinosaurs[i].lengthInMeters > lenghtInFeet) {
+
+//       longObj[dinosaurs[i].name] = dinosaurs[i].name
+      
+//       lenghtInFeet = dinosaurs[i].lengthInMeters
+
+//       dinosaurs[i].lengthInMeters *= 3.281
+
+//       longObj[dinosaurs[i].name] = lenghtInFeet
+
+//     }
+    
+//   }
+//   console.log(longObj)
+//   return longObj
+  
+// }
 
 /**
  * getDinosaurDescription()
@@ -44,8 +88,24 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
-
+function getDinosaurDescription(dinosaurs, id) {
+  let copyObj = {}
+  let sent = `A dinosaur with an ID of '${id}' cannot be found.`
+  for (let i = 0; i < dinosaurs.length; i++) {
+    copyObj = dinosaurs[i]
+    if (dinosaurs[i].dinosaurId === id) {
+      let name1 = copyObj.name
+      let pro1 = copyObj.pronunciation
+      let desc1 = copyObj.info
+      let period1 = copyObj.period
+      let lastAge = copyObj.mya
+      let age = lastAge[lastAge.length - 1]
+      sent = `${name1} (${pro1})\n${desc1} It lived in the ${period1} period, over ${age} million years ago.`
+    } 
+  }
+  
+  return sent
+}
 /**
  * getDinosaursAliveMya()
  * ---------------------
@@ -71,7 +131,79 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+  let dinoArray = []
+  let copyObj
+  for (let i = 0; i < dinosaurs.length; i++) {    
+    let myaRange = dinosaurs[i].mya
+    let max = Math.max(myaRange)
+    let min = Math.min(myaRange)
+    
+    if (key) {
+      if (myaRange.length === 1){
+        if (myaRange === mya || (myaRange - 1) === mya) {
+          dinoArray.push(dinosaurs[i].[key]) 
+        }
+      } else if (myaRange >= min && myaRange <= min) {
+        dinoArray.push(dinosaurs[i].[key])
+      }
+    } else if (!key) {
+      if (myaRange.length === 1){
+        if (myaRange === mya || (myaRange - 1) === mya) {
+          dinoArray.push(dinosaurs[i].dinosaurId) 
+        }
+      } else if (myaRange >= min && myaRange <= min) {
+        dinoArray.push(dinosaurs[i].dinosaurId)
+      }
+    }
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    // if (!key) {
+    //   if (myaRange.length === 1){
+    //     if (myaRange === mya || myaRange - 1 === mya) {
+    //       dinoArray.push(dinosaurs[i].dinosaurId) 
+    //     }
+    //   } else if (myaRange >= min && myaRange <= min) {
+    //     dinoArray.push(dinosaurs[i].dinosaurId)
+    //   }
+    // }
+  
+  
+
+
+
+
+
+
+
+  }
+    // For dinosaurs that lived during the `mya` value given, will return the value of the supplied key. Otherwise, returns the ID.
+
+
+
+
+
+
+
+return dinoArray
+}
+
+
+
+
+
+
+
+
+
 
 module.exports = {
   getLongestDinosaur,

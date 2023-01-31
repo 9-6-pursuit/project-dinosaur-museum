@@ -25,7 +25,29 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+  let dinoId = ""
+  let room1
+  let msg = `Dinosaur with name '${dinosaurName}' cannot be found.`
+  
+
+  for (let i = 0; i < dinosaurs.length; i++) {
+    if (dinosaurName === dinosaurs[i].name) {
+      dinoId = dinosaurs[i].dinosaurId
+      
+      for (let j = 0; j < rooms.length; j++) {
+        if (rooms[j].dinosaurs.includes(dinoId)) {
+            room1 = rooms[j].name
+            
+            msg = `${room1}`
+           }  
+          }
+      }
+    }
+  return msg
+}
+  
+
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +71,56 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+function getConnectedRoomNamesById(rooms, id) {
+let conRoomArr = []
+let idRoomArr = []
+let nameRoomArr = []
+let msg = `Room with ID of '${id}' could not be found.`
+
+  for (let i = 0; i < rooms.length; i++) {
+    if (id === rooms[i].roomId) {
+        conRoomArr = rooms[i].connectsTo
+        msg = conRoomArr
+        for (let j = 0; j < rooms.length; j++) {
+          for (let k = 0; k < conRoomArr.length; k++) {
+            if (conRoomArr[k] === rooms[j].roomId){
+            idRoomArr = rooms[j].name
+             nameRoomArr.push(idRoomArr)
+             msg = nameRoomArr
+            console.log(msg)
+          } 
+          }
+        }
+    }
+  }
+  return msg
+}
+
+
+
+
+
+// let conRoomArr = []
+// let conNameArr = []
+// let msg = `Room with ID of '${id}' could not be found.`
+
+//   for (let i = 0; i < rooms.length; i++) {
+//     if (id === rooms[i].roomId) {
+//         conRoomArr = rooms[i].connectsTo
+//         for (let j = 0; j < conRoomArr.length; j++) {
+//           if (conRoomArr[j] === rooms[i].roomId) {
+//             conNameArr = rooms[i].name
+//             return conNameArr
+//           }
+//         }
+//         }
+//     }
+//   return msg
+// }
+
+
+
+
 
 module.exports = {
   getRoomByDinosaurName,

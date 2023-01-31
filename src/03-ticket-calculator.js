@@ -54,7 +54,65 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let copyObj = {}
+  let msg = `Ticket type 'incorrect-type' cannot be found.`
+  let price = 0
+
+    if (!ticketData.hasOwnProperty(ticketInfo.ticketType)) {
+      return msg
+  } 
+    if (!ticketData[ticketInfo.ticketType].priceInCents.hasOwnProperty(ticketInfo.entrantType)) {
+      msg = `Entrant type 'incorrect-entrant' cannot be found.`
+      return msg
+  }
+    for (let i = 0; i < ticketInfo.extras.length; i++) {
+      if (ticketInfo.extras[i] !== (!ticketData.extras.hasOwnProperty(ticketInfo.extras[i]))) {
+        msg = `Extra type 'incorrect-extra' cannot be found.`
+        return msg
+      }      
+    }
+  
+  if (ticketInfo.ticketType === "general" && ticketInfo.extras.length === 0) {
+    if (ticketInfo.entrantType === "child") {
+      return 2000
+    } else if (ticketInfo.entrantType === "adult") {
+      return 3000
+    } else if (ticketInfo.entrantType === "senior") {
+      return 2500
+    }
+  }
+
+  if (ticketInfo.ticketType === "membership" && ticketInfo.extras.length === 0) {
+    if (ticketInfo.entrantType === "child") {
+      return 1500
+    } else if (ticketInfo.entrantType === "adult") {
+      return 2800
+    } else if (ticketInfo.entrantType === "senior") {
+      return 2300
+    }
+  }
+
+  if (ticketInfo.extras.length !== 0) {
+    if (ticketInfo.entrantType === "child") {
+      return 3000
+    } else if (ticketInfo.entrantType === "adult") {
+      return 4000
+    } else if (ticketInfo.entrantType === "senior") {
+      return 3500
+    }
+
+  }
+}
+
+
+
+
+
+
+
+
+
 
 /**
  * purchaseTickets()
@@ -109,7 +167,17 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+
+
+}
+
+
+
+
+
+
+
 
 // Do not change anything below this line.
 module.exports = {
