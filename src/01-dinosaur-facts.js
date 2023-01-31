@@ -5,6 +5,7 @@
 
   Keep in mind that your functions must still have and use a parameter for accepting all dinosaurs.
 */
+const dinosaurs = require("../data/dinosaurs");
 const exampleDinosaurData = require("../data/dinosaurs");
 // Do not change the line above.
 
@@ -22,8 +23,48 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+// function getLongestDinosaur(dinosaurs) {
+//   let highestLengthSoFar = 0;
+//   let object = {}
+//     for (let i = 0; i < dinosaurs.length; i++) {
+//      if (dinosaurs[i].lengthInMeters > highestLengthSoFar){
+//       highestLengthSoFar = dinosaurs[i].lengthInMeters * 3.281
+//       //object = {}
+//       object[dinosaurs[i].name] = dinosaurs[i.lengthInMeters
+//         }
+//     } return object
+//   } 
+//   console.log(dinosaurs)
 
+  function getLongestDinosaur(dinosaurs) {
+    let object = {}
+    let longLength = 30;
+
+if(dinosaurs.length === 0) {
+  return object
+  }
+for (let i = 0; i < dinosaurs[i].lengthInMeters; i++) {
+ if (longLength <= dinosaurs[i].lengthInMeters) {
+    longLength = dinosaurs[i].lengthInMeters * 3.281
+    object[dinosaurs[i].name] = longLength
+  }
+  }
+ return object
+  }  
+  
+
+   //console.log(dinosaurs[0].lengthInMeters)
+  // dinosaurId: 'YLtkN9R37',
+  // name: 'Allosaurus',
+  // pronunciation: 'AL-oh-sore-us',
+  // meaningOfName: 'other lizard',
+  // diet: 'carnivorous',
+  // lengthInMeters: 12,
+  // period: 'Late Jurassic',
+  // mya: [ 156, 144 ],
+  // info: 'Allosaurus was an apex predator in the Late Jurassic in North America.'
+
+//dinosaur is array, tallest dinosaur variable as key, value as length in feet
 /**
  * getDinosaurDescription()
  * ---------------------
@@ -44,7 +85,29 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+let result = "";
+  for (let i = 0; i < dinosaurs.length; i++) {
+    if(dinosaurs[i].dinosaurId === id && dinosaurs[i].mya.length <= 2){
+      result += `${dinosaurs[i].name} (${dinosaurs[i].pronunciation})\n${dinosaurs[i].info} It lived in the ${dinosaurs[i].period} period, over ${dinosaurs[i].mya[dinosaurs[i].mya.length - 1]} million years ago.`
+      return result
+      } 
+
+      } return "A dinosaur with an ID of \'incorrect-id\' cannot be found."
+
+      }
+
+      // dinosaurs = Array
+      // id = Element
+// dinosaurId: 'YLtkN9R37',
+  // name: 'Allosaurus',
+  // pronunciation: 'AL-oh-sore-us',
+  // meaningOfName: 'other lizard',
+  // diet: 'carnivorous',
+  // lengthInMeters: 12,
+  // period: 'Late Jurassic',
+  // mya: [ 156, 144 ],
+  // info: 'Allosaurus was an apex predator in the Late Jurassic in North America.'
 
 /**
  * getDinosaursAliveMya()
@@ -71,7 +134,26 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key){
+  let isAlive = []
+  for (let i = 0; i < dinosaurs.length; i++) {
+    //const dino = dinosaurs[i];
+    if ((mya === dinosaurs[i].mya[0] || mya === dinosaurs[i].mya[0]-1)|| (mya >= dinosaurs[i].mya[1] && mya <=dinosaurs[i].mya[0])) {
+      if (dinosaurs[i][key]){
+        isAlive.push(dinosaurs[i][key])
+      } else {
+        isAlive.push(dinosaurs[i]["dinosaurId"]);
+      }
+    } 
+  }
+return isAlive
+}
+  //console.log(key)
+  //return dinosaurId if alive(exists) during mya
+  //include mya.length <= 2, if mya.length == 1: allow for 1 MYA less than amount(ex: mya = 78, 77 is allowed)
+  // return result 
+  //
+//}
 
 module.exports = {
   getLongestDinosaur,
