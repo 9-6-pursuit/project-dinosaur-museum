@@ -56,7 +56,7 @@ const exampleTicketData = require("../data/tickets");
     //> "Entrant type 'kid' cannot be found."
  */
 function calculateTicketPrice(ticketData, ticketInfo) {
-  let purchases = 0;
+  let ticketinfo = 0;
   let extras = 0;
   let total = 0
   let entrantType = 0
@@ -74,23 +74,24 @@ function calculateTicketPrice(ticketData, ticketInfo) {
   }
   if (ticketInfo.entrantType === "child"){
     if(ticketInfo.ticketType === "general"){
-      purchases = ticketData.general.priceInCents.child
+      ticketinfo = ticketData.general.priceInCents.child
     } else if(ticketInfo.ticketType === "membership"){
-      purchases = ticketData.membership.priceInCents.child
+      ticketinfo = ticketData.membership.priceInCents.child
     }
   } else if (ticketInfo.entrantType === "adult"){
     if(ticketInfo.ticketType === "general"){
-      purchases = ticketData.general.priceInCents.adult
+      ticketinfo = ticketData.general.priceInCents.adult
     } else if (ticketInfo.ticketType === "membership"){
-      purchases = ticketData.membership.priceInCents.adult
+      ticketinfo = ticketData.membership.priceInCents.adult
     }
   } else if (ticketInfo.entrantType === "senior"){
     if(ticketInfo.ticketType === "general"){
-      purchases = ticketData.general.priceInCents.senior
+      ticketinfo = ticketData.general.priceInCents.senior
     } else if (ticketInfo.ticketType === "membership"){
-      purchases = ticketData.membership.priceInCents.senior
+      ticketinfo = ticketData.membership.priceInCents.senior
     }
   }
+  return ticketPrice.toFixed(2)
 }
 
 /**
@@ -103,14 +104,14 @@ function calculateTicketPrice(ticketData, ticketInfo) {
  * NOTE: Pay close attention to the format in the examples below and tests. You will need to have the same format to get the tests to pass.
  *
  * @param {Object} ticketData - An object containing data about prices to enter the museum. See the `data/tickets.js` file for an example of the input.
- * @param {Object[]} purchases - An array of objects. Each object represents a single ticket being purchased.
- * @param {string} purchases[].ticketType - Represents the type of ticket. Could be any string except the value "extras".
- * @param {string} purchases[].entrantType - Represents the type of entrant. Prices change depending on the entrant.
- * @param {string[]} purchases[].extras - An array of strings where each string represent a different "extra" that can be added to the ticket. All strings should be keys under the `extras` key in `ticketData`.
+ * @param {Object[]} ticketinfo - An array of objects. Each object represents a single ticket being purchased.
+ * @param {string} ticketinfo[].ticketType - Represents the type of ticket. Could be any string except the value "extras".
+ * @param {string} ticketinfo[].entrantType - Represents the type of entrant. Prices change depending on the entrant.
+ * @param {string[]} ticketinfo[].extras - An array of strings where each string represent a different "extra" that can be added to the ticket. All strings should be keys under the `extras` key in `ticketData`.
  * @returns {string} A full receipt, with each individual ticket bought and the total.
  *
  * EXAMPLE:
- *  const purchases = [
+ *  const ticketinfo = [
       {
         ticketType: "general",
         entrantType: "adult",
@@ -132,24 +133,24 @@ function calculateTicketPrice(ticketData, ticketInfo) {
         extras: ["education", "movie", "terrace"],
       },
     ];
-    purchaseTickets(tickets, purchases);
+    purchaseTickets(tickets, ticketinfo);
     //> "Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\nAdult General Admission: $50.00 (Movie Access, Terrace Access)\nSenior General Admission: $35.00 (Terrace Access)\nChild General Admission: $45.00 (Education Access, Movie Access, Terrace Access)\nChild General Admission: $45.00 (Education Access, Movie Access, Terrace Access)\n-------------------------------------------\nTOTAL: $175.00"
 
  * EXAMPLE:
-    const purchases = [
+    const ticketinfo = [
       {
         ticketType: "discount", // Incorrect
         entrantType: "adult",
         extras: ["movie", "terrace"],
       }
     ]
-    purchaseTickets(tickets, purchases);
+    purchaseTickets(tickets, ticketinfo);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {
-let purchases = 0;
+function purchaseTickets(ticketData, ticketinfo) {
+  let ticketinfo = 0;
   let extras = 0;
-  let total = 0
+  let entrantType =
 
   if(ticketInfo.entrantType !== 'child' && ticketInfo.entrantType !== 'adult' && ticketInfo.entrantType !== 'senior'){
     return  "Entrant type 'incorrect-entrant' cannot be found."
@@ -165,23 +166,23 @@ let purchases = 0;
 
   if(ticketInfo.entrantType === "child"){
     if(ticketInfo.ticketType === "general"){
-      purchases = ticketData.general.priceInCents.child
+      ticketinfo = ticketData.general.priceInCents.child
     } else if(ticketInfo.ticketType === "membership"){
-      purchases = ticketData.membership.priceInCents.child
-    }//if closing tag
+      ticketinfo = ticketData.membership.priceInCents.child
+    }
   } else if(ticketInfo.entrantType === "adult"){
     if(ticketInfo.ticketType === "general"){
-      purchases = ticketData.general.priceInCents.adult
+      ticketinfo = ticketData.general.priceInCents.adult
     } else if(ticketInfo.ticketType === "membership"){
-      purchases = ticketData.membership.priceInCents.adult
-    }//if closing tag
+      ticketinfo = ticketData.membership.priceInCents.adult
+    }
   } else if(ticketInfo.entrantType === "senior"){
     if(ticketInfo.ticketType === "general"){
-      purchases = ticketData.general.priceInCents.senior
+      ticketinfo = ticketData.general.priceInCents.senior
     } else if(ticketInfo.ticketType === "membership"){
-      purchases = ticketData.membership.priceInCents.senior
-    }//if closing tag
-  }//if closing tag
+      ticketinfo = ticketData.membership.priceInCents.senior
+    }
+  }
 
 }
 
