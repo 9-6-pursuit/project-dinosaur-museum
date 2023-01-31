@@ -43,23 +43,6 @@ function getLongestDinosaur(dinosaurs) {
   return resultObject;
 }
 
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-function getLongestDinosaur(dinosaurs) {
-  let greatestLengthSoFar = 0;
-  let longestDinoSoFar = null;
-  if (dinosaurs.length === 0) {
-    return {}
-  }
-  for (const dino of dinosaurs) {
-      if (dino.lengthInMeters > greatestLengthSoFar) {
-          longestDinoSoFar = dino;
-          greatestLengthSoFar = dino.lengthInMeters
-      }
-  }
-  let newObject = {}
-  newObject[longestDinoSoFar.name] = longestDinoSoFar.lengthInMeters * 3.281
-  return newObject;
-} - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 /**
  * getDinosaurDescription()
@@ -82,21 +65,7 @@ function getLongestDinosaur(dinosaurs) {
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
 function getDinosaurDescription(dinosaurs, id) {
-  // console.log(dinosaurs.name,dinosaurs.period,dinosaurs.dinosaurId)
-
-  // function buildResultStr = (input) {
-  //   let resultStr = "";
-  //   switch (dino.p) {
-  //     case "xxx":
-  //       resultStr = ""
-  //       break
-
-  //     default:
-  //       resultStr = ""
-  //   }
-
-  //   return resultStr;
-  // }
+  
   for (const dino of dinosaurs) {
     let returnStr = "";
   
@@ -136,12 +105,52 @@ function getDinosaurDescription(dinosaurs, id) {
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
+
+
 function getDinosaursAliveMya(dinosaurs, mya, key) {
-  let result = [] //dinosaurs who were alive at mya
+  let resultArray = []  //blank array
+  let dinoKey = (key) ? key : "dinosaurId";
+    for (const dino of dinosaurs) {
+      if(dino.mya.includes(mya) || dino.mya[0] > mya && dino.mya[1]< mya || dino.mya.length === 1 && dino.mya - 1 === mya)  {
+        resultArray.push(dino[dinoKey])
+      }
+    }
+    return resultArray
+  }
+  
+  // for (let index = 0; index < dinosaurs.length; index++) {
+  // if(dinosaurs[index].mya.includes(mya)||dinosaurs[index].mya[0] > mya && dinosaurs[index].mya[1]< mya || dinosaurs[index].mya.length === 1 && dinosaurs[index].mya-1  === mya ){
 
-  return result
+   //Although MYA at both indexes show when the dinosaurs lived, index 1 demonstrates when they both lived and died. Dinosaurs with only index 0 lived at that specific year. Checks to see if there are two MYAs in the range of lived and died. If there is only one number, it will check to see if the MYA is within the specified MYA range.
 
-}
+  //   if(!key) {
+
+  //           dinosaurArray.push(dinosaurs[index].dinosaurId)
+  //         } else {
+  //           dinosaurArray.push(dinosaurs[index][key])
+  //         }   
+  // }
+
+// For dinosaurs that lived during the `mya` value given, will return the value of the supplied key. Otherwise, returns the ID.
+
+// }
+//   return dinosaurArray
+
+//   let resultArray = [] //dinosaurs who were alive at mya
+//   //resultArray.push(dinosaurs[0].dinosaurId)
+//   let dinoKey = (key) ? key : "dinosaurId";
+  
+//   for (const dino of dinosaurs) {
+    
+//     if(dino.mya[0] > mya && dino.mya[1] < mya || dino.mya.length === 1 && dino.mya === mya){
+//       resultArray.push(dino[dinoKey])
+//     }
+//     console.log("resultArray: ",resultArray, "dinoKey: ", dinoKey)
+//  }
+  
+//   return resultArray
+
+// }
 
 // function getDinosaursAliveMya(dinosaurs, mya, key) {
   

@@ -25,7 +25,39 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+  let roomName = "";
+  let dinoId = "";
+  let dinoErrMessage = `Dinosaur with name '${dinosaurName}' cannot be found.`;
+  let roomErrMessage = `Room with ID of 'incorrect-id' could not be found.`
+  let dinoExists = false; // initialized and set to false.
+  let dinoFoundInRoom = false // initialized to false
+ 
+  for (const dino of dinosaurs) { // loops through dinosaurs array and 
+    if (dino.name === dinosaurName) { // check that dinosaurName exist and
+      dinoId = dino.dinosaurId;
+      dinoExists = true} // sets dinoExists boolean variable to true
+  } // if name doesn't exist, boolean is already set to false when initialized.
+  
+  if(!dinoExists) {
+    // This message is returned if dinosaurName does not exist within the dinosaur array
+    return dinoErrMessage
+  }
+ 
+  for (const room of rooms) {
+    if(room.dinosaurs.includes(dinoId)){
+      roomName = room.name
+      dinoFoundInRoom = true; // initialized to false.  Will only change to true if the id is found in the rooms.
+    } 
+  } 
+  if(!dinoFoundInRoom){ 
+    // dinoFountInRoom was initialize to false.  It's set to true if the id is not fount in the rooms.  It's true, we return the following message.
+      return `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`;
+  }
+
+  // ternary operator returnd the roomName if roomName is truthy and roomErrMessage if roomName is falsy.
+  return !!roomName ? roomName : roomErrMessage;
+}
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +81,42 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+function getConnectedRoomNamesById(rooms, id) {
+  const connectedRoom = [];
+  let errMessage = `Room with ID of 'incorrect-id' could not be found.`
+  let foundRoomId = false;
+  let foundConnectedRoom = [];
+
+  for (const room of rooms) {
+    
+    if(room.roomId === id){
+      foundConnectedRoom = room.connectsTo
+      console.log('foundConnectedRoom: ==> ', foundConnectedRoom)
+      foundRoomId = true;
+    } 
+    
+    for (const connected of foundConnectedRoom) {
+      // console.log('connected: \n',connected)
+      for (const connectingRoom of connected) {
+        // console.log('connectingRoom: \n',connectingRoom)
+        if(connectingRoom === 'incorrect-id' 
+          || connectingRoom === undefined ) {
+            errMessage = `Room with ID of 'incorrect-id' could not be found.`
+        } else {
+          connectedRoom.push(connectingRoom)
+        }
+      }
+    }
+  }
+  // console.log('connectedRoom:==>',connectedRoom)
+  if(!foundRoomId) {
+    return `Room with ID of '${id}' could not be found.`
+  }
+  return !!connectedRoom
+}
+
+
+
 
 module.exports = {
   getRoomByDinosaurName,
