@@ -5,6 +5,7 @@
 
   Keep in mind that your functions must still have and use a parameter for accepting all tickets.
 */
+const { extras } = require("../data/tickets");
 const exampleTicketData = require("../data/tickets");
 // Do not change the line above.
 
@@ -131,26 +132,22 @@ function calculateTicketPrice(ticketData, ticketInfo) {
 function purchaseTickets(ticketData, purchases) {
   let price = 0;
   let totalPrice = 0;
+  let extraPrice = 0;
   let receipt = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`;
 
   for (const purchase of purchases) {
-    if (!ticketData[purchase.ticketType]) {
-      return `Ticket type '${purchase.ticketType}' cannot be found.`;
+    const ticket = ticketData[purchase.ticketType];
+    
+    price = calculateTicketPrice(ticketData, purchase)
+    if (typeof price === "string"){
+      return price
     }
 
-    const ticket = ticketData[purchase.ticketType];
-    if (!ticket.priceInCents[purchase.entrantType]) {
-      return `Entrant type '${purchase.entrantType}' cannot be found.`;
-    }
-    let extraPrice =0
+    extraPrice = 0
     for (const extra of purchase.extras) {
-      if (!ticketData.extras[extra]) {
-        return `Extra type '${extra}' cannot be found.`;
-      }
       extraPrice += ticketData.extras[extra].priceInCents[purchase.entrantType]
     }
     
-    price = ticket.priceInCents[purchase.entrantType] + extraPrice;
     totalPrice += price;
     
     receipt += `\n${purchase.entrantType[0].toUpperCase() + purchase.entrantType.slice(1)} ${ticket.description}: $${(price / 100).toFixed(2)}`;
@@ -159,7 +156,6 @@ function purchaseTickets(ticketData, purchases) {
       receipt += ` (${purchase.extras.map(e => ticketData.extras[e].description).join(", ")})`;
     }
   }
-
   receipt += `\n-------------------------------------------\nTOTAL: $${(totalPrice / 100).toFixed(2)}`;
   return receipt;
 }
