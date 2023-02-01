@@ -25,7 +25,16 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+  let dinosaur = dinosaurs.find(dinosaur => dinosaur.name === dinosaurName);
+  if (!dinosaur) return `Dinosaur with name '${dinosaurName}' cannot be found.`;
+
+  let room = rooms.find(room => room.dinosaurs.includes(dinosaur.id));
+  if (!room) return `Room for dinosaur with name '${dinosaurName}' cannot be found.`;
+
+  return room.name;
+}
+
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +58,16 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+    function getConnectedRoomNamesById(rooms, id) {
+      let room = rooms.find(room => room.id === id);
+      if (!room) return "Room not found";
+    
+      return room.connectedRooms.map(roomId => {
+        let connectedRoom = rooms.find(room => room.id === roomId);
+        return connectedRoom.name;
+      });
+    }
+    
 
 module.exports = {
   getRoomByDinosaurName,
