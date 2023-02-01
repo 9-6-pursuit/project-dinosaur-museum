@@ -55,21 +55,51 @@ const exampleTicketData = require("../data/tickets");
     //> "Entrant type 'kid' cannot be found."
  */
 function calculateTicketPrice(ticketData, ticketInfo) {
-  if(ticketInfo.ticketType !== "general" && ticketInfo.ticketType !== "membership") {
-    return "Ticket type 'incorrect-type' cannot be found."
-  }
+let price = 0;
 
-  if(ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior") {
-    return "Entrant type 'incorrect-entrant' cannot be found."
-  }
+let ticketType = ticketInfo.ticketType
+let entrantType = ticketInfo.entrantType
+let extras = ticketInfo.extras
 
-  for (let index = 0; index < ticketInfo.extras.length; index++) {
-     if (ticketInfo.extras.length === 0 || ticketInfo.extras[index] !== "education" || ticketInfo.extras[index] !== "movie" || ticketInfo.extras[index] !== "terrace") {
-       return "Extra type 'incorrect-extra' cannot be found."
-      }
-     }
-     return ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType]
+if(ticketData[ticketType] === undefined) {
+  return `Ticket type '${ticketType}' cannot be found.`
+}
+
+if(ticketData.general.priceInCents[entrantType] === undefined) {
+  return `Entrant type '${entrantType}' cannot be found.`
+}
+
+
+price += ticketData[ticketType].priceInCents[entrantType]
+
+for (extraType of extras) {
+  if(ticketData.extras[extraType] === undefined) {
+    return `Extra type '${extraType}' cannot be found.`
   }
+  price += ticketData.extras[extraType].priceInCents[entrantType]
+}
+
+return price
+
+}
+
+
+
+  // if(ticketInfo.ticketType !== "general" && ticketInfo.ticketType !== "membership") {
+  //   return "Ticket type 'incorrect-type' cannot be found."
+  // }
+
+  // if(ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior") {
+  //   return "Entrant type 'incorrect-entrant' cannot be found."
+  // }
+
+  // for (let index = 0; index < ticketInfo.extras.length; index++) {
+  //    if (ticketInfo.extras.length === 0 || ticketInfo.extras[index] !== "education" || ticketInfo.extras[index] !== "movie" || ticketInfo.extras[index] !== "terrace") {
+  //      return "Extra type 'incorrect-extra' cannot be found."
+  //     }
+  //    }
+  //    return ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType]
+  
 
 
 
@@ -134,7 +164,52 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  let totalPrice = 0;
+  let receiptString = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n`
+
+  function titleCase(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+  }
+
+  for (const ticketInfo of purchases) {
+    let price = calculateTicketPrice(ticketData, ticketInfo)
+
+    if(typeof price === "string") {
+      return price
+    }
+
+
+    totalPrice += price
+
+    receiptString += `${titleCase(ticketInfo.entrantType)} ${ticketInfo.ticketType[0].toUpperCase()}${ticketInfo.ticketType.slice(1)} Admission: $${(price / 100).toFixed(2)}`
+    let capitalizedExtras = []
+   if(ticketInfo.extras.length > 0) {
+    // receiptString += " ("
+     
+   }
+    for (const extraType of ticketInfo.extras) {
+      capitalizedExtras.push(titleCase(extraType))
+    }
+    if(capitalizedExtras.length > 1) {
+      receiptString += capitalizedExtras.join(" Access, ")
+    } 
+    else if(capitalizedExtras === 1) {
+      receiptString += capitalizedExtras[0]
+    }
+
+    if(ticketInfo.extras.length > 0) {
+      receiptString +=
+      ` (${titleCase(ticketInfo.extras[0])} ${ticketInfo.extras.slice(1)}Access)`
+      // `(${ticketInfo.extras[0].toUpperCase()} ${ticketInfo.extras.slice(1)}Access)`
+      // receiptString += ")"
+    }
+
+    receiptString += "\n"
+  }
+  receiptString += `-------------------------------------------\nTOTAL: $${(totalPrice /100).toFixed(2)}`
+  return receiptString
+}
 
 // Do not change anything below this line.
 module.exports = {
