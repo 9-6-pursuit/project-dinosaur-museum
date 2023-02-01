@@ -49,12 +49,48 @@ const exampleTicketData = require("../data/tickets");
  *  const ticketInfo = {
       ticketType: "general",
       entrantType: "kid", // Incorrect
-      extras: ["movie"],
+      extras: ["movie"],npm testw
+
     };
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+ 
+if (!ticketData.hasOwnProperty(ticketInfo.ticketType)) {
+  return `Ticket type '${ticketInfo.ticketType}' cannot be found.`;
+} else if (!ticketData.general.priceInCents.hasOwnProperty(ticketInfo.entrantType)) {
+  return `Entrant type '${ticketInfo.entrantType}' cannot be found.`;
+}
+  
+  for (const extra of ticketInfo.extras) {
+    if (!Object.keys(ticketData.extras).includes(extra)) {
+      return `Extra type '${extra}' cannot be found.`;
+    }
+  }
+  
+  let regTicket = ticketData[ticketInfo.ticketType]["priceInCents"][ticketInfo.entrantType];
+  
+  if (ticketInfo.extras.length !== 0) { 
+    for(const extra of ticketInfo.extras) {
+      regTicket += ticketData.extras[extra]["priceInCents"][ticketInfo.entrantType];
+    }
+  }
+  return regTicket;
+  
+}
+ 
+
+
+// const tickets = {
+//   general: {
+//     description: "General Admission",
+//     priceInCents: {
+//       child: 2000,
+//       adult: 3000,
+//       senior: 2500,
+
+
 
 /**
  * purchaseTickets()
@@ -109,7 +145,9 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  
+}
 
 // Do not change anything below this line.
 module.exports = {

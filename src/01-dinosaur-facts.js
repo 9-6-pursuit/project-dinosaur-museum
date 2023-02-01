@@ -6,6 +6,7 @@
   Keep in mind that your functions must still have and use a parameter for accepting all dinosaurs.
 */
 const exampleDinosaurData = require("../data/dinosaurs");
+
 // Do not change the line above.
 
 /**
@@ -20,9 +21,27 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *
  * EXAMPLE:
  *  getLongestDinosaur(dinosaurs);
- *  //> { Brachiosaurus: 98.43 }
+ *  //> { Brachiosaurus: 98.43 }cd
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  let object = {};
+
+  let longLength = 30;
+  
+  if (dinosaurs.length === 0) {
+    return object
+  }
+  for (let i = 0; i < dinosaurs[i].lengthInMeters; i++) {
+    
+    if (longLength <= dinosaurs[i].lengthInMeters) {
+      
+      longLength = dinosaurs[i].lengthInMeters * 3.281;
+      object[dinosaurs[i].name] = longLength
+    }
+  }
+  return object
+  }
+
 
 /**
  * getDinosaurDescription()
@@ -44,7 +63,18 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+
+let error = `A dinosaur with an ID of '${id}' cannot be found.`
+for (const dino of dinosaurs) {
+  if (dino.dinosaurId === id) {
+    return`${dino.name} (${dino.pronunciation})
+${dino.info} It lived in the ${dino.period} period, over ${dino.mya[dino.mya.length -1]} million years ago.`
+     
+  } 
+} 
+return error
+}
 
 /**
  * getDinosaursAliveMya()
@@ -71,7 +101,12 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+  let dinosA = [];
+  for (const dino of dinosaurs) {
+    if ()
+  }
+}
 
 module.exports = {
   getLongestDinosaur,
