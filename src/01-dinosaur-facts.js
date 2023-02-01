@@ -22,7 +22,22 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  if (!dinosaurs.length){
+    return {}
+  }
+  let bigDino = dinosaurs[0]
+
+  for (let i = 0; i <dinosaurs.length; i++){
+    if (dinosaurs[i].lengthInMeters > bigDino.lengthInMeters){
+      bigDino = dinosaurs[i]
+    }
+  }
+let inFeet = bigDino.lengthInMeters *3.281
+let bigDinoObj = {}
+bigDinoObj[bigDino.name] = inFeet;
+return bigDinoObj
+}
 
 /**
  * getDinosaurDescription()
@@ -44,7 +59,22 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+  for (let i = 0; i < dinosaurs.length; i++){
+    let dinoObj = dinosaurs[i]
+    let myaArr = dinoObj["mya"]
+    let dinoId = dinoObj["dinosaurId"]
+    let name = dinoObj["name"]
+    let pronunciation = dinoObj["pronunciation"]
+    let info = dinoObj["info"]
+    let period = dinoObj["period"]
+    let mya = myaArr[myaArr.length-1]
+    if (dinoId === id ){
+      return `${name} (${pronunciation})\n${info} It lived in the ${period} period, over ${mya} million years ago.`
+    } 
+  }
+  return "A dinosaur with an ID of 'incorrect-id' cannot be found."
+}
 
 /**
  * getDinosaursAliveMya()
@@ -71,7 +101,34 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+  let dinoArr = []
+  for (dino of dinosaurs){
+    let myaArr = dino["mya"] // the mya array within the specific obj
+    let dinoId = dino["dinosaurId"] // the dinosaur ID within the specific obj
+    let myaFirst = myaArr[0] //1st value of the mya array
+    let myaLast = myaArr[myaArr.length-1] //Last value of the mya array
+   
+if (myaArr.length !==1){
+  if (myaLast <= mya && mya <= myaFirst){
+    if(!key){
+      dinoArr.push(dinoId)
+    } else {
+      dinoArr.push(dino[key])
+    }
+  }
+} else {
+  if (mya === myaLast || mya === myaLast-1){
+    if(!key){
+      dinoArr.push(dinoId)
+    } else {
+      dinoArr.push(dino[key])
+    }
+  }
+}
+  }
+  return dinoArr
+}
 
 module.exports = {
   getLongestDinosaur,

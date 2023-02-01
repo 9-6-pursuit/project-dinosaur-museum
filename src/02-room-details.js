@@ -25,7 +25,22 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+  let dinoID
+  for (let dino of dinosaurs){
+    if(dinosaurName === dino.name){
+      dinoID = dino.dinosaurId
+    } 
+  }
+  for (let room of rooms){
+    if(room.dinosaurs.includes(dinoID)){
+      return room.name
+    } 
+  }
+  if (!dinoID){
+    return `Dinosaur with name '${dinosaurName}' cannot be found.`
+  }  return `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`
+  }
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +64,47 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+function getConnectedRoomNamesById(rooms, id) {
+  let newArr = [];
+  // let finalArr =[]
+
+  // These triple loops look insane so let me explain:
+  for (let i = 0; i < rooms.length; i++){  
+    if (id === rooms[i]["roomId"]){//This i loop checks which roomId matches with the id paramater
+
+      for (let j = 0; j < rooms[i]["connectsTo"].length; j++){ //This j loop is on stand by, so it can be use with the k loop. the j stands for the index of the 'connectedTo' array
+
+        for (let k = 0; k < rooms.length; k++){ 
+          if (rooms[i]["connectsTo"][j] === rooms[k]["roomId"]){ //This k loop looks at each elements within the 'connectedTo' array and see which elements matches the Room's ID
+            newArr.push(rooms[k]["name"]) //once there's a match, it will push the room's Name to the newArr array.
+          }
+        }       
+  }
+} 
+
+
+
+
+} 
+
+
+if(!newArr.length) {
+  return `Room with ID of '${id}' could not be found.`}
+
+  return newArr
+
+  if (newArr.includes('incorrect-id')) {
+    return `Room with ID of 'incorrect-id' could not be found.`}
+
+// if(!newArr.length) {
+//     return `Room with ID of '${id}' could not be found.`
+//    } else if (!newArr.includes('incorrect-id')) {
+//     return `Room with ID of 'incorrect-id' could not be found.`
+  
+    
+//    }
+
+ } 
 
 module.exports = {
   getRoomByDinosaurName,

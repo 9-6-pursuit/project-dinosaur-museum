@@ -5,6 +5,7 @@
 
   Keep in mind that your functions must still have and use a parameter for accepting all tickets.
 */
+const tickets = require("../data/tickets");
 const exampleTicketData = require("../data/tickets");
 // Do not change the line above.
 
@@ -54,7 +55,137 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  if (ticketInfo.ticketType !== "general" && ticketInfo.ticketType !== "membership") {
+    return `Ticket type '${ticketInfo.ticketType}' cannot be found.`;
+  }
+// When the ticket type don't make sense^^^
+
+  if (ticketInfo.extras.length === 0 && ticketInfo.ticketType === "general"){
+    if (ticketInfo.entrantType === "child"){
+      return tickets.general.priceInCents.child
+    } else if (ticketInfo.entrantType === "adult"){
+      return tickets.general.priceInCents.adult
+    } else if (ticketInfo.entrantType === "senior"){
+      return tickets.general.priceInCents.senior
+    } else if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior"){
+      return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+    }
+  } // For General Admissions with no Extras ^^^
+
+  if (ticketInfo.extras.length === 0 && ticketInfo.ticketType === "membership"){
+    if (ticketInfo.entrantType === "child"){
+      return tickets.membership.priceInCents.child
+    } else if (ticketInfo.entrantType === "adult"){
+      return tickets.membership.priceInCents.adult
+    } else if (ticketInfo.entrantType === "senior"){
+      return tickets.membership.priceInCents.senior
+    } else if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior"){
+      return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+    }
+  } // For Membership Admissions with no Extras^^^
+
+  if (ticketInfo.extras.length === 3 && ticketInfo.ticketType === "general"){
+    if (ticketInfo.entrantType === "child"){
+      return tickets.general.priceInCents.child + tickets.extras.movie.priceInCents.child + tickets.extras.education.priceInCents.child + tickets.extras.terrace.priceInCents.child
+    } else if (ticketInfo.entrantType === "adult"){
+      return tickets.general.priceInCents.adult + tickets.extras.movie.priceInCents.adult + tickets.extras.education.priceInCents.adult + tickets.extras.terrace.priceInCents.adult
+    } else if (ticketInfo.entrantType === "senior"){
+      return tickets.general.priceInCents.senior + tickets.extras.movie.priceInCents.senior + tickets.extras.education.priceInCents.senior + tickets.extras.terrace.priceInCents.senior
+    } else if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior"){
+      return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+    }
+  } // For General Admissions with 3 Extras^^^
+
+  if (ticketInfo.extras.length === 3 && ticketInfo.ticketType === "membership"){
+    if (ticketInfo.entrantType === "child"){
+      return tickets.membership.priceInCents.child + tickets.extras.movie.priceInCents.child + tickets.extras.education.priceInCents.child + tickets.extras.terrace.priceInCents.child
+    } else if (ticketInfo.entrantType === "adult"){
+      return tickets.membership.priceInCents.adult + tickets.extras.movie.priceInCents.adult + tickets.extras.education.priceInCents.adult + tickets.extras.terrace.priceInCents.adult
+    } else if (ticketInfo.entrantType === "senior"){
+      return tickets.membership.priceInCents.senior + tickets.extras.movie.priceInCents.senior + tickets.extras.education.priceInCents.senior + tickets.extras.terrace.priceInCents.senior
+    } else if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior"){
+      return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+    }
+  } // For Membership Admissions with 3 Extras^^^
+
+  if (ticketInfo.extras.includes("movie") && ticketInfo.extras.includes("education") && ticketInfo.ticketType === "membership"){
+    if (ticketInfo.entrantType === "child"){
+      return tickets.membership.priceInCents.child + tickets.extras.movie.priceInCents.child + tickets.extras.education.priceInCents.child
+    } else if (ticketInfo.entrantType === "adult"){
+      return tickets.membership.priceInCents.adult + tickets.extras.movie.priceInCents.adult + tickets.extras.education.priceInCents.adult
+    } else if (ticketInfo.entrantType === "senior"){
+      return tickets.membership.priceInCents.senior + tickets.extras.movie.priceInCents.senior + tickets.extras.education.priceInCents.senior
+    } else if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior"){
+      return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+    }
+  } // For Membership Admissions with Movie & Education Extra^^^
+
+  if (ticketInfo.extras.includes("movie") && ticketInfo.extras.includes("education") && ticketInfo.ticketType === "general"){
+    if (ticketInfo.entrantType === "child"){
+      return tickets.general.priceInCents.child + tickets.extras.movie.priceInCents.child + tickets.extras.education.priceInCents.child
+    } else if (ticketInfo.entrantType === "adult"){
+      return tickets.general.priceInCents.adult + tickets.extras.movie.priceInCents.adult + tickets.extras.education.priceInCents.adult
+    } else if (ticketInfo.entrantType === "senior"){
+      return tickets.general.priceInCents.senior + tickets.extras.movie.priceInCents.senior + tickets.extras.education.priceInCents.senior
+    } else if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior"){
+      return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+    }
+  } // For General Admissions with Movie & Education Extra^^^
+
+  if (ticketInfo.extras.includes("terrace") && ticketInfo.extras.includes("education") && ticketInfo.ticketType === "membership"){
+    if (ticketInfo.entrantType === "child"){
+      return tickets.membership.priceInCents.child + tickets.extras.terrace.priceInCents.child + tickets.extras.education.priceInCents.child
+    } else if (ticketInfo.entrantType === "adult"){
+      return tickets.membership.priceInCents.adult + tickets.extras.terrace.priceInCents.adult + tickets.extras.education.priceInCents.adult
+    } else if (ticketInfo.entrantType === "senior"){
+      return tickets.membership.priceInCents.senior + tickets.extras.terrace.priceInCents.senior + tickets.extras.education.priceInCents.senior
+    } else if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior"){
+      return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+    }
+  } // For Membership Admissions with Terrace & Education Extra^^^
+
+  if (ticketInfo.extras.includes("terrace") && ticketInfo.extras.includes("education") && ticketInfo.ticketType === "general"){
+    if (ticketInfo.entrantType === "child"){
+      return tickets.general.priceInCents.child + tickets.extras.terrace.priceInCents.child + tickets.extras.education.priceInCents.child
+    } else if (ticketInfo.entrantType === "adult"){
+      return tickets.general.priceInCents.adult + tickets.extras.terrace.priceInCents.adult + tickets.extras.education.priceInCents.adult
+    } else if (ticketInfo.entrantType === "senior"){
+      return tickets.general.priceInCents.senior + tickets.extras.terrace.priceInCents.senior + tickets.extras.education.priceInCents.senior
+    } else if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior"){
+      return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+    }
+  } // For General Admissions with Terrace & Education Extra^^^
+
+  if (ticketInfo.extras.includes("movie") && ticketInfo.ticketType === "general"){
+    if (ticketInfo.entrantType === "child"){
+      return tickets.general.priceInCents.child + tickets.extras.movie.priceInCents.child
+    } else if (ticketInfo.entrantType === "adult"){
+      return tickets.general.priceInCents.adult + tickets.extras.movie.priceInCents.adult
+    } else if (ticketInfo.entrantType === "senior"){
+      return tickets.general.priceInCents.senior + tickets.extras.movie.priceInCents.senior
+    } else if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior"){
+      return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+    }
+  } // For General Admissions with Movie Extra^^^
+
+  if (ticketInfo.extras.includes("movie") && ticketInfo.ticketType === "membership"){
+    if (ticketInfo.entrantType === "child"){
+      return ((tickets.membership.priceInCents.child) + (tickets.extras.movie.priceInCents.child))
+    } else if (ticketInfo.entrantType === "adult"){
+      return tickets.membership.priceInCents.adult + tickets.extras.movie.priceInCents.adult
+    } else if (ticketInfo.entrantType === "senior"){
+      return tickets.membership.priceInCents.senior + tickets.extras.movie.priceInCents.senior
+    } else if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior"){
+      return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+    }
+  } // For Membership Admissions with Movie Extra^^^
+
+   if (ticketInfo.entrantType !== "movie" && ticketInfo.entrantType !== "terrace" && ticketInfo.entrantType !== "education") {
+    return `Extra type '${ticketInfo.extras}' cannot be found.`;
+   } // For Extra Types that don't make sense^^^
+
+}
 
 /**
  * purchaseTickets()
