@@ -83,36 +83,38 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
  */
 function getConnectedRoomNamesById(rooms, id) {
   const connectedRoom = [];
-  let errMessage = `Room with ID of 'incorrect-id' could not be found.`
+  const foundConnectedRooms = [];
+  let errMessage = `Room with ID of '${id}' could not be found.`
+  let errMessage2 = `Room with ID of 'incorrect-id' could not be found.`
   let foundRoomId = false;
-  let foundConnectedRoom = [];
 
   for (const room of rooms) {
-    
     if(room.roomId === id){
-      foundConnectedRoom = room.connectsTo
-      console.log('foundConnectedRoom: ==> ', foundConnectedRoom)
+      foundConnectedRooms = room.connectsTo
+      console.log('foundConnectedRooms: ==> ', foundConnectedRooms)
       foundRoomId = true;
     } 
-    
-    for (const connected of foundConnectedRoom) {
-      // console.log('connected: \n',connected)
-      for (const connectingRoom of connected) {
-        // console.log('connectingRoom: \n',connectingRoom)
-        if(connectingRoom === 'incorrect-id' 
-          || connectingRoom === undefined ) {
-            errMessage = `Room with ID of 'incorrect-id' could not be found.`
-        } else {
-          connectedRoom.push(connectingRoom)
-        }
+  }
+  if(foundConnectedRooms.length === 0){
+    return errMessage
+  } else if(foundConnectedRooms.includes('incorrect-id')){
+    return errMessage2
+  }
+  for (const connected of foundConnectedRooms) {
+    // console.log('connected: \n',connected)
+    for (const connectingRoom of connected) {
+      // console.log('connectingRoom: \n',connectingRoom)
+      if(connectingRoom === connected){
+        connectedRoom.push(connectingRoom)
       }
     }
   }
+  
   // console.log('connectedRoom:==>',connectedRoom)
-  if(!foundRoomId) {
-    return `Room with ID of '${id}' could not be found.`
-  }
-  return !!connectedRoom
+  // if(!foundRoomId) {
+  //   return `Room with ID of '${id}' could not be found.`
+  // }
+  return connectedRoom
 }
 
 

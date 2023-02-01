@@ -69,9 +69,10 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     return `Ticket type '${ticketInfo.ticketType}' cannot be found.`
   } else if(ticketInfo.entrantType !== "child" || ticketInfo.entrantType !== "adult" || ticketInfo.entrantType !== "senior"){
     return `Entrant type '${ticketInfo.entrantType}' cannot be found.` 
-  } else if(ticketInfo.extras===("Membership Admission") || ticketInfo.extras===("Movie Access") || ticketInfo.extras===("Education Access") || ticketInfo.extras===("Terrace Access")){
+  } // if extras array contain a valid entry assign the entry to a variable...
+  else if(ticketInfo.extras.description===("Membership Admission") || ticketInfo.extras===("Movie Access") || ticketInfo.extras===("Education Access") || ticketInfo.extras===("Terrace Access")){
     ticketExtra = tickets.entrantType
-  } else{
+  } else{ //...else return an error message
     return `Entrant type '${ticketInfo.extras}' cannot be found.` 
   } 
   console.log('ticketInfo: ',ticketInfo,'\nticketData:===> ',ticketData)
