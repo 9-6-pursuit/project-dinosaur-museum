@@ -148,43 +148,7 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     //> "Ticket type 'discount' cannot be found."
  */
 function purchaseTickets(ticketData, ticketinfo) {
-  let ticketinfo = 0;
-  let extras = 0;
-  let entrantType =
-
-  if(ticketInfo.entrantType !== 'child' && ticketInfo.entrantType !== 'adult' && ticketInfo.entrantType !== 'senior'){
-    return  "Entrant type 'incorrect-entrant' cannot be found."
-  }
-
-  if(ticketInfo.ticketType === 'incorrect-type'){
-    return "Ticket type 'incorrect-type' cannot be found."
-  }
-
-  if(ticketInfo.extras.includes("incorrect-extra")){
-    return "Extra type 'incorrect-extra' cannot be found."
-  }
-
-  if(ticketInfo.entrantType === "child"){
-    if(ticketInfo.ticketType === "general"){
-      ticketinfo = ticketData.general.priceInCents.child
-    } else if(ticketInfo.ticketType === "membership"){
-      ticketinfo = ticketData.membership.priceInCents.child
-    }
-  } else if(ticketInfo.entrantType === "adult"){
-    if(ticketInfo.ticketType === "general"){
-      ticketinfo = ticketData.general.priceInCents.adult
-    } else if(ticketInfo.ticketType === "membership"){
-      ticketinfo = ticketData.membership.priceInCents.adult
-    }
-  } else if(ticketInfo.entrantType === "senior"){
-    if(ticketInfo.ticketType === "general"){
-      ticketinfo = ticketData.general.priceInCents.senior
-    } else if(ticketInfo.ticketType === "membership"){
-      ticketinfo = ticketData.membership.priceInCents.senior
-    }
-  }
-
-}
+  
 
 // Do not change anything below this line.
 module.exports = {

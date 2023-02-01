@@ -116,8 +116,7 @@ function getDinosaursAliveMya(dinosaurs, mya, key) {
            }
        } 
        return arr
-      }
-        
+      }    
   }
 
 module.exports = {
