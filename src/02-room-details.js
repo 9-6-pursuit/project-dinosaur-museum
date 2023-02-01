@@ -101,7 +101,7 @@ function getConnectedRoomNamesById(rooms, id) {
     return errMessage2
   }
   for (const connected of foundConnectedRooms) {
-    // console.log('connected: \n',connected)
+    console.log('connected: \n',connected)
     for (const connectingRoom of connected) {
       // console.log('connectingRoom: \n',connectingRoom)
       if(connectingRoom === connected){
