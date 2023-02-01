@@ -54,8 +54,41 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  // 1. returns the ticket price based on the ticket information supplied
+  // 2. Display error message if ticketInfo.ticketType` value or `ticketInfo.entrantType` value, or any of the values inside of the `ticketInfo.extras` is in incorrect
+  let resultPrice = 0;
+  let ticketEntrant = "";
+  let ticketExtra = "";
+  //membership: "Membership Admission"
+  //movie: "Movie Access"
+  //education: "Education Access"
+  //terrace: "Terrace Access"
 
+  if(ticketInfo.ticketType === "incorrect-type"){
+    return `Ticket type '${ticketInfo.ticketType}' cannot be found.`
+  } else if(ticketInfo.entrantType !== "child" || ticketInfo.entrantType !== "adult" || ticketInfo.entrantType !== "senior"){
+    return `Entrant type '${ticketInfo.entrantType}' cannot be found.` 
+  } // if extras array contain a valid entry assign the entry to a variable...
+  else if(ticketInfo.extras.description===("Membership Admission") || ticketInfo.extras===("Movie Access") || ticketInfo.extras===("Education Access") || ticketInfo.extras===("Terrace Access")){
+    ticketExtra = tickets.entrantType
+  } else{ //...else return an error message
+    return `Entrant type '${ticketInfo.extras}' cannot be found.` 
+  } 
+  console.log('ticketInfo: ',ticketInfo,'\nticketData:===> ',ticketData)
+  return resultPrice
+}
+/*
+extras: {
+    movie: {
+      description: "Movie Access",
+      priceInCents: {
+        child: 1000,
+        adult: 1000,
+        senior: 1000,
+      },
+    },
+*/
 /**
  * purchaseTickets()
  * ---------------------
@@ -112,6 +145,9 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
 function purchaseTickets(ticketData, purchases) {}
 
 // Do not change anything below this line.
+
+
+
 module.exports = {
   calculateTicketPrice,
   purchaseTickets,
