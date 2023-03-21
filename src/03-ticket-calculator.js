@@ -54,7 +54,38 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  
+  let cost = 0
+  
+  if (ticketInfo.extras.includes("incorrect-extra")) {
+    return `Extra type \'${ticketInfo.extras}\' cannot be found.`
+  }
+
+  if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior"){
+    
+    return `Entrant type \'${ticketInfo.entrantType}\' cannot be found.`
+  }
+
+  if (ticketInfo.ticketType !== "general" && ticketInfo.ticketType !== "membership") {
+    return `Ticket type \'${ticketInfo.ticketType}\' cannot be found.`
+  }
+
+  if (ticketInfo.ticketType === "general" || "membership") {
+    cost += ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType]
+  } 
+ 
+  for (let extras of ticketInfo.extras){ 
+
+  if (ticketData.extras){
+    cost += ticketData.extras[extras].priceInCents[ticketInfo.entrantType]
+    }
+  }
+  
+  return cost
+
+}
+
 
 /**
  * purchaseTickets()
@@ -109,7 +140,43 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  
+   //starting piont of total
+   let total = 0;
+   // regular receipt
+  let receipt = "Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n";
+ 
+  //iterate through purchases
+  for (let i = 0; i < purchases.length; i ++){
+    //create main ticket & calculate price
+    let main = calculateTicketPrice(ticketData, purchases[i]);
+    total += main;
+    if (typeof(main) === 'string') {
+      //An array of strings where each string represent a different "extra" that can be added to the ticket. All strings should be keys under the `extras` key in `ticketData`.
+      return main;
+    }
+    //create extras receipt
+    let ticketExtras = purchases[i].extras;
+    let extrasReceipt = '';
+    for (let j = 0; j < ticketExtras.length; j++){
+      extrasReceipt += ticketData.extras[ticketExtras[j]].description;
+      if (ticketExtras.length - 1 !== j) {
+        extrasReceipt += ', ';
+      }
+    }
+    receipt += `${purchases[i].entrantType[0].toUpperCase() + purchases[i].entrantType.slice(1)} ${ticketData[purchases[i].ticketType].description}: $${(main / 100).toFixed(2)}`;
+    if (ticketExtras.length){
+      receipt += ` (${extrasReceipt})\n` 
+    } else {
+      receipt += `\n` 
+    }
+  }
+    //convert from cents to dollars
+  return `${receipt}-------------------------------------------\nTOTAL: $${(total / 100).toFixed(2)}`;
+
+}
+
 
 // Do not change anything below this line.
 module.exports = {

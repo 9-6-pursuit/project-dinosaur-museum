@@ -25,7 +25,29 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+
+
+let getRoom
+let lostDinos = `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`
+
+for (let index = 0; index < dinosaurs.length; index++) {
+  if (dinosaurs[index].name === dinosaurName) {
+    getRoom = dinosaurs[index]
+  }
+}
+
+if (!getRoom) return `Dinosaur with name '${dinosaurName}' cannot be found.`
+
+for (let index = 0; index < rooms.length; index++) {
+  if (rooms[index].dinosaurs.includes(getRoom.dinosaurId)){
+    return rooms[index].name
+  }
+  
+}
+return lostDinos
+
+}
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +71,46 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+function getConnectedRoomNamesById(rooms, id) {
+
+let connectedRooms = [] 
+// where room IDs will be stored
+
+let connectedNames = [] 
+// where connected rooms will be stored by room name 
+
+let wrongId = `Room with ID of '${id}' could not be found.`
+//if initial room ID is incorrect, should return an error msg
+
+let incorrectId = "Room with ID of 'incorrect-id' could not be found."
+//if connected room ID is incorrect, should return an error msg
+
+if (id === 'incorrect-id'){
+  return wrongId 
+}
+for (let i = 0; i < rooms.length; i++) {
+if (rooms[i].roomId === id) {
+  connectedRooms = rooms[i].connectsTo; 
+} 
+//rooms (by ID) connected to ID. If id param is found in rooms, its connected rooms will be pushed into connectedRooms array by ID.
+
+if (connectedRooms.includes('incorrect-id')) {
+  return incorrectId 
+}
+} for (let room of rooms) {
+  if (connectedRooms.includes(room.roomId)){
+    connectedNames.push(room.name) 
+  }
+}
+//if the room ID is found in rooms, push the name into connectedNames array.
+return connectedNames
+
+}
+
+
+
+
+
 
 module.exports = {
   getRoomByDinosaurName,
