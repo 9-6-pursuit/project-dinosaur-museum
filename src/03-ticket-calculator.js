@@ -70,9 +70,9 @@ function calculateTicketPrice(ticketData, ticketInfo) {
   };
 //THE TYPE OF ENTRANT IS COMING FROM THE TICKET INFO OBJECT ENTRANT-TYPE KEY/PROPERTY
   const entrantType = ticketInfo.entrantType;
-//IF THE TYPE OF TICKET IS IN THE TICKET-TYPE OBJECT BUT THE ENTRANT TYPE IS NOT
+//IF THE TYPE OF TICKET IS IN THE TICKET-DATA OBJECT BUT THE ENTRANT TYPE IS NOT, RETURN MESSAGE
   if (ticketData[ticketType].priceInCents[entrantType] === undefined) {
-    return `Entrant type '${entrantType}' cannot be found.`
+    return `Entrant type '${entrantType}' cannot be found ever.`
   };
 //TOTAL COST FOR ONE TICKET W/OUT EXTRAS
   let total = ticketData[ticketType].priceInCents[entrantType];
@@ -143,18 +143,18 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-//HELPER FUNCTION
+//HELPER FUNCTION THAT'LL CAPITALIZE THE FIRST LETTER IN A WORD
 function capFirst(word) {
   return word.charAt(0).toUpperCase() + word.slice(1)
 };
-
+//THIS FUNCTION WILL INVOKE THE FIRST FUNCTION TO FIND TICKET PRICE
 function purchaseTickets(ticketData, purchases) {
   //console.log(purchases)
   let ticketPrice = 0;
   let receipt = "Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n";
 //LOOP THRU PURCHASES ARRAY 
   for (let purchase of purchases) {
-    let cost = calculateTicketPrice(ticketData,purchase);
+    let cost = calculateTicketPrice(ticketData, purchase);
     
     if (typeof cost === 'string') {
       return cost
