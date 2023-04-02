@@ -21,7 +21,7 @@ const exampleTicketData = require("../data/tickets");
  * If either the `ticketInfo.ticketType` value or `ticketInfo.entrantType` value is incorrect, or any of the values inside of the `ticketInfo.extras` key is incorrect, an error message should be returned.
  *
  * @param {Object} ticketData - An object containing data about prices to enter the museum. See the `data/tickets.js` file for an example of the input.
- * @param {Object} ticketInfo - An object representing data for a single ticket.
+ * @param {Object} ticketInfo - An object representing data for a single ticket. See examples below of input.
  * @param {string} ticketInfo.ticketType - Represents the type of ticket. Could be any string except the value "extras".
  * @param {string} ticketInfo.entrantType - Represents the type of entrant. Prices change depending on the entrant.
  * @param {string[]} ticketInfo.extras - An array of strings where each string represent a different "extra" that can be added to the ticket. All strings should be keys under the `extras` key in `ticketData`.
@@ -54,9 +54,43 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  //STEP 1:Find the ticketInfo price for our entrantType & ticketType
+  //STEP 2:For each extra, find the price for our entrantType for that entrant and add that to the total
+  //PRICE OF TICKET: ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType]
+  //Return total
+  //console.log(ticketData);
+  //console.log(ticketInfo);
 
-/**
+//THE TYPE OF TICKET IS COMING FROM THE TICKET INFO OBJECT TICKET-TYPE KEY/PROPERTY
+  const ticketType = ticketInfo.ticketType;
+//IF THE TYPE OF TICKET IS NOT FOUND IN THE TICKET-DATA OBJECT, RETURN MESSAGE
+  if (!ticketData[ticketType]) {
+    return `Ticket type '${ticketType}' cannot be found.`
+  };
+//THE TYPE OF ENTRANT IS COMING FROM THE TICKET INFO OBJECT ENTRANT-TYPE KEY/PROPERTY
+  const entrantType = ticketInfo.entrantType;
+//IF THE TYPE OF TICKET IS IN THE TICKET-DATA OBJECT BUT THE ENTRANT TYPE IS NOT, RETURN MESSAGE
+  if (ticketData[ticketType].priceInCents[entrantType] === undefined) {
+    return `Entrant type '${entrantType}' cannot be found ever.`
+  };
+//TOTAL COST FOR ONE TICKET W/OUT EXTRAS
+  let total = ticketData[ticketType].priceInCents[entrantType];
+
+//Find the price OF TICKET W/ENTRANT TYPE & W/EXTRAS. LOOP THRU EXTRAS ARRAY INSIDE OBJECT
+  for (const extra of ticketInfo.extras) {
+    const extraType = ticketData.extras[extra];
+    if (extraType === undefined) {
+      return `Extra type '${extra}' cannot be found.`
+    };
+//EXTRA PRICE = ticketData.extras[extra].priceInCents[entrantType]
+    const extraPrice = extraType.priceInCents[entrantType];
+//TOTAL = total + ticketData.extras[extra].priceInCents[entrantType]
+    total = total + extraPrice
+  };
+  return total
+};
+ /**
  * purchaseTickets()
  * ---------------------
  * Returns a receipt based off of a number of purchase. Each "purchase" maintains the shape from `ticketInfo` in the previous function.
@@ -109,7 +143,37 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+//HELPER FUNCTION THAT'LL CAPITALIZE THE FIRST LETTER IN A WORD
+function capFirst(word) {
+  return word.charAt(0).toUpperCase() + word.slice(1)
+};
+//THIS FUNCTION WILL INVOKE THE FIRST FUNCTION TO FIND TICKET PRICE
+function purchaseTickets(ticketData, purchases) {
+  //console.log(purchases)
+  let ticketPrice = 0;
+  let receipt = "Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n";
+//LOOP THRU PURCHASES ARRAY 
+  for (let purchase of purchases) {
+    let cost = calculateTicketPrice(ticketData, purchase);
+    
+    if (typeof cost === 'string') {
+      return cost
+    };
+    ticketPrice = ticketPrice + cost;
+//NESTED LOOP THRU EXTRAS ARRAY INSIDE OF PURCHASE OBJECT 
+    for (let i = 0; i < purchase.extras.length; i++) {
+      purchase.extras[i] = capFirst(purchase.extras[i]) + ' Access' 
+    }
+    //CHECKING IF THERE ARE EXTRAS TO INCLUDE
+    if (purchase.extras.length != 0){
+      receipt += `${capFirst(purchase.entrantType)} ${ticketData[purchase.ticketType].description}: $${(cost/100).toFixed(2)} (${purchase.extras.join(', ')})\n`
+    } else {
+      receipt += `${capFirst(purchase.entrantType)} ${ticketData[purchase.ticketType].description}: $${(cost/100).toFixed(2)}\n`
+    };
+  };
+  return receipt + `-------------------------------------------\nTOTAL: $${(ticketPrice/100).toFixed(2)}`
+};
+
 
 // Do not change anything below this line.
 module.exports = {
